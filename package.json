@@ -24,6 +24,7 @@
 		"@radix-ui/react-tooltip": "^1.1.7",
 		"@types/react-syntax-highlighter": "^15.5.13",
 		"ai": "^4.1.16",
+		"bcrypt": "^5.1.1",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"dotenv": "^16.4.7",
@@ -48,6 +49,7 @@
 	"devDependencies": {
 		"@eslint/eslintrc": "^3",
 		"@tailwindcss/typography": "^0.5.16",
+		"@types/bcrypt": "^5.0.2",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
