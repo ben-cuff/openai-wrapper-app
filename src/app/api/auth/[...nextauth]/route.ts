@@ -1,18 +1,37 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-const prisma = new PrismaClient();
-
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
 	providers: [
-		GoogleProvider({
-			clientId: process.env.GOOGLE_CLIENT_ID || "",
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+		CredentialsProvider({
+			name: "Credentials",
+			credentials: {
+				email: { label: "Username", type: "username" },
+				password: { label: "Password", type: "password" },
+			},
+			async authorize(credentials) {
+				
+			},
 		}),
 	],
-	adapter: PrismaAdapter(prisma),
+	callbacks: {
+		async jwt({ token, user }) {
+			if (user) {
+				token.id = user.id;
+				token.name = user.name;
+				token.email = user.email;
+			}
+			return token;
+		},
+		async session({ session, token }) {
+			if (session.user) {
+				session.user.id = token.id as number;
+				session.user.name = token.name;
+				session.user.email = token.email;
+			}
+			return session;
+		},
+	},
 };
 
 const handler = NextAuth(authOptions);
