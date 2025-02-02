@@ -6,7 +6,12 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Copy, Check } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { cn } from "@/lib/utils";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface Message {
 	id: string;
@@ -25,6 +30,7 @@ export default function ChatPage() {
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
+	const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
 	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
@@ -109,22 +115,97 @@ export default function ChatPage() {
 		}
 	};
 
+	const handleCopyCode = (code: string) => {
+		navigator.clipboard.writeText(code);
+		setCopiedCode(code);
+		setTimeout(() => setCopiedCode(null), 2000);
+	};
+
+	const MarkdownComponents = {
+		p({ children }) {
+			return <span className="mb-2 last:mb-0 block">{children}</span>;
+		},
+		code({ node, inline, className, children, ...props }) {
+			const match = /language-(\w+)/.exec(className || '');
+			const code = String(children).replace(/\n$/, '');
+			const lang = match ? match[1] : '';
+				
+			if (inline) {
+				return (
+					<code className="bg-black/10 dark:bg-white/10 rounded-md px-1 text-[16px]" {...props}>
+						{children}
+					</code>
+				);
+			}
+
+			return (
+				<div className="relative group my-4">
+					{lang && (
+						<div className="absolute top-0 right-0 bg-black/10 dark:bg-white/10 rounded-tr-md rounded-bl-md px-2 py-1 text-xs font-mono">
+							{lang}
+						</div>
+					)}
+					<button
+						onClick={() => handleCopyCode(code)}
+						className="absolute right-2 top-10 opacity-0 group-hover:opacity-100 transition-opacity"
+					>
+						{copiedCode === code ? (
+							<Check className="h-4 w-4" />
+						) : (
+							<Copy className="h-4 w-4" />
+						)}
+					</button>
+					<div className="rounded-md overflow-hidden">
+						<SyntaxHighlighter
+							language={lang || 'text'}
+							style={oneDark}
+							customStyle={{
+								margin: 0,
+								fontSize: '16px',
+								padding: '1rem',
+								paddingTop: '2rem',
+								background: '#1a1b26',
+							}}
+							showLineNumbers={true}
+							wrapLines={true}
+						>
+							{code}
+						</SyntaxHighlighter>
+					</div>
+				</div>
+			);
+		},
+		ul({ children }) {
+			return <ul className="list-disc list-inside my-2">{children}</ul>;
+		},
+		ol({ children }) {
+			return <ol className="list-decimal list-inside my-2">{children}</ol>;
+		},
+		a({ href, children }) {
+			return (
+				<a 
+					href={href}
+					className="text-blue-500 hover:underline"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					{children}
+				</a>
+			);
+		},
+	};
+
 	return (
 		<main className="container flex h-screen flex-col gap-4 p-4 md:p-6">
 			<Card className="flex-1">
-				<ScrollArea
-					className="h-[calc(100vh-8rem)]"
-					ref={scrollAreaRef}
-				>
+				<ScrollArea className="h-[calc(100vh-8rem)]" ref={scrollAreaRef}>
 					<CardContent className="p-6">
 						<div className="flex flex-col gap-4">
 							{messages.map((message) => (
 								<div
 									key={message.id}
 									className={`flex gap-3 ${
-										message.role === "assistant"
-											? ""
-											: "flex-row-reverse"
+										message.role === "assistant" ? "" : "flex-row-reverse"
 									}`}
 								>
 									<Avatar>
@@ -136,19 +217,26 @@ export default function ChatPage() {
 											}
 										/>
 										<AvatarFallback>
-											{message.role === "assistant"
-												? "AI"
-												: "ME"}
+											{message.role === "assistant" ? "AI" : "ME"}
 										</AvatarFallback>
 									</Avatar>
 									<div
 										className={`rounded-lg px-4 py-2 max-w-[80%] ${
 											message.role === "assistant"
-												? "bg-muted"
+												? "bg-muted prose prose-sm dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 max-w-none"
 												: "bg-primary text-primary-foreground"
 										}`}
 									>
-										<p className="text-sm whitespace-pre-wrap">{message.content}</p>
+										{message.role === "assistant" ? (
+											<ReactMarkdown 
+												remarkPlugins={[remarkGfm]}
+												components={MarkdownComponents}
+											>
+												{message.content}
+											</ReactMarkdown>
+										) : (
+											<p className="text-sm whitespace-pre-wrap">{message.content}</p>
+										)}
 									</div>
 								</div>
 							))}
