@@ -5,10 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Loader2 } from "lucide-react";
 
 interface Message {
+	id: string;
 	role: "user" | "assistant";
 	content: string;
 }
@@ -16,6 +17,7 @@ interface Message {
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([
 		{
+			id: "initial",
 			role: "assistant",
 			content: "Hello! How can I help you today?",
 		},
@@ -24,34 +26,64 @@ export default function ChatPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-	// Scroll to bottom when messages change
-	useEffect(() => {
+	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
 			scrollAreaRef.current.scrollTop =
 				scrollAreaRef.current.scrollHeight;
 		}
-	}, [messages]);
+	}, []);
+
+	// Scroll to bottom when messages change
+	useEffect(() => {
+		scrollToBottom();
+	}, [messages, scrollToBottom]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!input.trim() || isLoading) return;
 
-		// Add user message
-		const userMessage: Message = { role: "user", content: input.trim() };
-		setMessages((prev) => [...prev, userMessage]);
+		const userMessage: Message = {
+			id: crypto.randomUUID(),
+			role: "user",
+			content: input.trim(),
+		};
+		setMessages(prev => [...prev, userMessage]);
 		setInput("");
 		setIsLoading(true);
 
-		// Simulate API delay
-		setTimeout(() => {
+		try {
+			const response = await fetch('/api/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					messages: [...messages, userMessage].map(({ role, content }) => ({
+						role,
+						content,
+					})),
+				}),
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to fetch response');
+			}
+
+			const data = await response.json();
+			
 			const assistantMessage: Message = {
+				id: crypto.randomUUID(),
 				role: "assistant",
-				content:
-					"This is a simulated response. Connect your backend to get real AI responses!",
+				content: data.content,
 			};
-			setMessages((prev) => [...prev, assistantMessage]);
+			
+			setMessages(prev => [...prev, assistantMessage]);
+		} catch (error) {
+			console.error('Error:', error);
+			// Handle error - maybe show a toast notification
+		} finally {
 			setIsLoading(false);
-		}, 1000);
+		}
 	};
 
 	return (
@@ -63,9 +95,9 @@ export default function ChatPage() {
 				>
 					<CardContent className="p-6">
 						<div className="flex flex-col gap-4">
-							{messages.map((message, index) => (
+							{messages.map((message) => (
 								<div
-									key={index}
+									key={message.id}
 									className={`flex gap-3 ${
 										message.role === "assistant"
 											? ""
