@@ -17,11 +17,14 @@ export default function Home() {
 				<section className="flex flex-col items-center justify-center space-y-8 px-4 py-24 text-center">
 					<h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
 						Welcome to{" "}
-						<span className="text-primary">Your Amazing Platform</span>
+						<span className="text-primary">
+							Your Amazing Platform
+						</span>
 					</h1>
 					<p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-						Transform your workflow with our powerful tools and intuitive
-						interface. Built for developers, designed for everyone.
+						Transform your workflow with our powerful tools and
+						intuitive interface. Built for developers, designed for
+						everyone.
 					</p>
 					<div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
 						<Button size="lg">Get Started</Button>
@@ -135,12 +138,12 @@ const features = [
 	},
 	{
 		title: "Real-time Updates",
-		description: "Stay in sync with instant updates and live collaboration.",
+		description:
+			"Stay in sync with instant updates and live collaboration.",
 	},
 	{
 		title: "24/7 Support",
-		description:
-			"Our dedicated team is always here to help you succeed.",
+		description: "Our dedicated team is always here to help you succeed.",
 	},
 	{
 		title: "Customizable",
