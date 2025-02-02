@@ -9,6 +9,11 @@ declare module "next-auth" {
 			openai_api_key?: string | null;
 		};
 	}
+	interface User {
+		id: number;
+		username: string;
+		openai_api_key: string;
+	}
 }
 
 export const authOptions: NextAuthOptions = {
@@ -55,8 +60,8 @@ export const authOptions: NextAuthOptions = {
 		async session({ session, token }) {
 			if (session.user) {
 				session.user.id = token.id as number;
-				session.user.username = token.username;
-				session.user.openai_api_key = token.openai_api_key;
+				session.user.username = token.username as string;
+				session.user.openai_api_key = token.openai_api_key as string;
 			}
 			return session;
 		},
