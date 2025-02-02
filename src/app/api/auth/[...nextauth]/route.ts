@@ -1,16 +1,47 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+declare module "next-auth" {
+	interface Session {
+		user: {
+			id?: number;
+			username?: string | null;
+			openai_api_key?: string | null;
+		};
+	}
+}
+
 export const authOptions: NextAuthOptions = {
 	providers: [
 		CredentialsProvider({
 			name: "Credentials",
 			credentials: {
-				email: { label: "Username", type: "username" },
+				username: { label: "Username", type: "username" },
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials) {
-				
+				console.log(credentials);
+				const { csrfToken, ...restCredentials } = credentials;
+				const res = await fetch(
+					`${process.env.base_url}/api/auth/login`,
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify(restCredentials),
+					}
+				);
+
+				const user = await res.json();
+
+				console.log(user);
+
+				if (res.ok && user) {
+					return user.user;
+				} else {
+					return null;
+				}
 			},
 		}),
 	],
@@ -18,16 +49,16 @@ export const authOptions: NextAuthOptions = {
 		async jwt({ token, user }) {
 			if (user) {
 				token.id = user.id;
-				token.name = user.name;
 				token.username = user.username;
+				token.openai_api_key = user.openai_api_key;
 			}
 			return token;
 		},
 		async session({ session, token }) {
 			if (session.user) {
 				session.user.id = token.id as number;
-				session.user.name = token.name;
 				session.user.username = token.username;
+				session.user.openai_api_key = token.openai_api_key;
 			}
 			return session;
 		},

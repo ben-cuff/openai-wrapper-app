@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
 		if (hash === user.hashed_password) {
 			return new Response(
-				JSON.stringify({ message: "Login successful" }),
+				JSON.stringify({ message: "Login successful", user }),
 				{
 					status: 200,
 					headers: { "Content-Type": "application/json" },
