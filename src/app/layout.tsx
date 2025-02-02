@@ -22,10 +22,16 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					<div className="fixed right-4 top-4 z-50">
-						<ThemeToggle />
+					<div className="relative flex min-h-screen flex-col">
+						<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+							<div className="container flex h-14 items-center justify-end">
+								<ThemeToggle />
+							</div>
+						</header>
+						<main className="flex-1">
+							{children}
+						</main>
 					</div>
-					{children}
 				</ThemeProvider>
 			</body>
 		</html>
