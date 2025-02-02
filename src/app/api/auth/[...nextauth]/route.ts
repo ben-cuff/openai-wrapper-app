@@ -20,8 +20,6 @@ export const authOptions: NextAuthOptions = {
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials) {
-				console.log(credentials);
-				const { csrfToken, ...restCredentials } = credentials;
 				const res = await fetch(
 					`${process.env.base_url}/api/auth/login`,
 					{
@@ -29,7 +27,7 @@ export const authOptions: NextAuthOptions = {
 						headers: {
 							"Content-Type": "application/json",
 						},
-						body: JSON.stringify(restCredentials),
+						body: JSON.stringify(credentials),
 					}
 				);
 
