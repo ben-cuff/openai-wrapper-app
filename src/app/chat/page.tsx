@@ -51,6 +51,14 @@ export default function ChatPage() {
 		setInput("");
 		setIsLoading(true);
 
+		// Create a temporary message for streaming
+		const tempMessageId = crypto.randomUUID();
+		setMessages(prev => [...prev, {
+			id: tempMessageId,
+			role: "assistant",
+			content: "",
+		}]);
+
 		try {
 			const response = await fetch('/api/chat', {
 				method: 'POST',
@@ -69,15 +77,30 @@ export default function ChatPage() {
 				throw new Error('Failed to fetch response');
 			}
 
-			const data = await response.json();
-			
-			const assistantMessage: Message = {
-				id: crypto.randomUUID(),
-				role: "assistant",
-				content: data.content,
-			};
-			
-			setMessages(prev => [...prev, assistantMessage]);
+			if (!response.body) {
+				throw new Error('No response body');
+			}
+
+			const reader = response.body.getReader();
+			const decoder = new TextDecoder();
+			let content = "";
+
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+
+				const chunk = decoder.decode(value);
+				content += chunk;
+
+				// Update the temporary message with the accumulated content
+				setMessages(prev => 
+					prev.map(message => 
+						message.id === tempMessageId 
+							? { ...message, content } 
+							: message
+					)
+				);
+			}
 		} catch (error) {
 			console.error('Error:', error);
 			// Handle error - maybe show a toast notification
@@ -125,23 +148,10 @@ export default function ChatPage() {
 												: "bg-primary text-primary-foreground"
 										}`}
 									>
-										<p className="text-sm">
-											{message.content}
-										</p>
+										<p className="text-sm whitespace-pre-wrap">{message.content}</p>
 									</div>
 								</div>
 							))}
-							{isLoading && (
-								<div className="flex gap-3">
-									<Avatar>
-										<AvatarImage src="/bot-avatar.png" />
-										<AvatarFallback>AI</AvatarFallback>
-									</Avatar>
-									<div className="rounded-lg px-4 py-2 bg-muted">
-										<Loader2 className="h-4 w-4 animate-spin" />
-									</div>
-								</div>
-							)}
 						</div>
 					</CardContent>
 				</ScrollArea>
