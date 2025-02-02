@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -13,13 +12,13 @@ import { useState } from "react";
 export default function SignInPage() {
 	const router = useRouter();
 	const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [password2, setPassword2] = useState("");
+	const [password, setPassword] = useState("");
+	const [password2, setPassword2] = useState("");
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-        // form validation for length of password
+		// form validation for length of password
 		if (password.length < 8) {
 			alert("Password must be at least 8 characters long");
 			return;
@@ -32,19 +31,16 @@ export default function SignInPage() {
 		}
 
 		// attempts to register the user with the api
-		const response = await fetch(
-			`/api/auth/register`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					username: username,
-					password: password,
-				}),
-			}
-		);
+		const response = await fetch(`/api/auth/register`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				username: username,
+				password: password,
+			}),
+		});
 
 		// if the registration fails, alert the user to the error
 		if (!response.ok) {
