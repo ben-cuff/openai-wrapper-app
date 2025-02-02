@@ -1,3 +1,4 @@
+import NavBar from "@/components/navbar/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -23,15 +24,7 @@ export default function RootLayout({
 				>
 					<div className="relative flex min-h-screen flex-col">
 						<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-							<div className="container flex h-14 items-center justify-end">
-								<Avatar className="mr-2">
-									<AvatarImage src="https://github.com/shadcn.png" />
-									<AvatarFallback>CN</AvatarFallback>
-								</Avatar>
-								<div className="mr-2">
-									<ThemeToggle />
-								</div>
-							</div>
+							<NavBar></NavBar>
 						</header>
 						<main className="flex-1">{children}</main>
 					</div>
