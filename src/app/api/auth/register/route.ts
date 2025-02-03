@@ -2,7 +2,6 @@ import { prismaLib } from "@/lib/prisma";
 import { createHash } from "crypto";
 
 export async function POST(req: Request) {
-	console.log("attempting...");
 	const { username, password } = await req.json();
 	const hashed_password = createHash("sha256").update(password).digest("hex");
 
@@ -24,8 +23,6 @@ export async function POST(req: Request) {
 			}
 		);
 	}
-
-	console.log(user);
 
 	return new Response(JSON.stringify({ success: true, user }), {
 		status: 201,

@@ -28,21 +28,17 @@ export async function PATCH(req: Request) {
 			);
 		}
 
-		const user = await prismaLib.account.findFirst({
+		const updatedUser = await prismaLib.account.update({
 			where: { id },
+			data: { openai_api_key },
 		});
 
-		if (!user) {
+		if (!updatedUser) {
 			return new Response(JSON.stringify({ message: "User not found" }), {
 				status: 404,
 				headers: { "Content-Type": "application/json" },
 			});
 		}
-
-		await prismaLib.account.update({
-			where: { id },
-			data: { openai_api_key },
-		});
 
 		return new Response(
 			JSON.stringify({ message: "Open API key updated successfully" }),
