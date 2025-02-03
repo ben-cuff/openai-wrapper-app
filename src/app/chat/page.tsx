@@ -223,10 +223,10 @@ export default function ChatPage() {
 	};
 
 	return (
-		<main className="container flex h-screen flex-col gap-4 p-4 md:p-6">
+		<main className="container flex h-auto flex-col gap-4 p-4 md:p-6">
 			<Card className="flex-1">
 				<ScrollArea
-					className="h-[calc(100vh-8rem)]"
+					className="h-[calc(100vh-10rem)]"
 					ref={scrollAreaRef}
 				>
 					<CardContent className="p-6">
