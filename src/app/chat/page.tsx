@@ -223,51 +223,24 @@ export default function ChatPage() {
 					<DropdownMenuContent>
 						<DropdownMenuLabel>AI Models</DropdownMenuLabel>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem
-							onClick={() => setAIModel("gpt-3.5-turbo")}
-							className="flex items-center justify-between"
-						>
-							GPT-3.5 Turbo
-							{AIModel === "gpt-3.5-turbo" && (
-								<Check className="h-4 w-4" />
-							)}
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() => setAIModel("gpt-4")}
-							className="flex items-center justify-between"
-						>
-							GPT-4
-							{AIModel === "gpt-4" && (
-								<Check className="h-4 w-4" />
-							)}
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() => setAIModel("o1-mini")}
-							className="flex items-center justify-between"
-						>
-							o1-mini
-							{AIModel === "o1-mini" && (
-								<Check className="h-4 w-4" />
-							)}
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() => setAIModel("gpt-4o")}
-							className="flex items-center justify-between"
-						>
-							GPT-4o
-							{AIModel === "gpt-4o" && (
-								<Check className="h-4 w-4" />
-							)}
-						</DropdownMenuItem>
-						<DropdownMenuItem
-							onClick={() => setAIModel("gpt-4o-mini")}
-							className="flex items-center justify-between"
-						>
-							GPT-4o-mini
-							{AIModel === "gpt-4o-mini" && (
-								<Check className="h-4 w-4" />
-							)}
-						</DropdownMenuItem>
+						{[
+							{ id: "gpt-3.5-turbo", label: "GPT-3.5 Turbo" },
+							{ id: "gpt-4", label: "GPT-4" },
+							{ id: "o1-mini", label: "o1-mini" },
+							{ id: "gpt-4o", label: "GPT-4o" },
+							{ id: "gpt-4o-mini", label: "GPT-4o-mini" }
+						].map((model) => (
+							<DropdownMenuItem
+								key={model.id}
+								onClick={() => setAIModel(model.id)}
+								className="flex items-center justify-between"
+							>
+								{model.label}
+								{AIModel === model.id && (
+									<Check className="h-4 w-4" />
+								)}
+							</DropdownMenuItem>
+						))}
 					</DropdownMenuContent>
 				</DropdownMenu>
 				<Button type="submit" disabled={isLoading}>
