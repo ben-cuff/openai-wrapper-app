@@ -13,13 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Check, Copy, Loader2 } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import remarkGfm from "remark-gfm";
 
 interface Message {
 	id: string;
@@ -143,85 +139,6 @@ export default function ChatPage() {
 		setTimeout(() => setCopiedCode(null), 2000);
 	};
 
-	const MarkdownComponents = {
-		p({ children }) {
-			return <span className="mb-2 last:mb-0 block">{children}</span>;
-		},
-		code({ node, inline, className, children, ...props }) {
-			const match = /language-(\w+)/.exec(className || "");
-			const code = String(children).replace(/\n$/, "");
-			const lang = match ? match[1] : "";
-
-			if (inline) {
-				return (
-					<code
-						className="bg-black/10 dark:bg-white/10 rounded-md px-1 text-[16px]"
-						{...props}
-					>
-						{children}
-					</code>
-				);
-			}
-
-			return (
-				<div className="relative group my-4">
-					{lang && (
-						<div className="absolute top-0 right-0 bg-black/10 dark:bg-white/10 rounded-tr-md rounded-bl-md px-2 py-1 text-xs font-mono">
-							{lang}
-						</div>
-					)}
-					<button
-						onClick={() => handleCopyCode(code)}
-						className="absolute right-2 top-10 opacity-0 group-hover:opacity-100 transition-opacity"
-					>
-						{copiedCode === code ? (
-							<Check className="h-4 w-4" />
-						) : (
-							<Copy className="h-4 w-4" />
-						)}
-					</button>
-					<div className="rounded-md overflow-hidden">
-						<SyntaxHighlighter
-							language={lang || "text"}
-							style={oneDark}
-							customStyle={{
-								margin: 0,
-								fontSize: "16px",
-								padding: "1rem",
-								paddingTop: "2rem",
-								background: "#1a1b26",
-							}}
-							showLineNumbers={true}
-							wrapLines={true}
-						>
-							{code}
-						</SyntaxHighlighter>
-					</div>
-				</div>
-			);
-		},
-		ul({ children }) {
-			return <ul className="list-disc list-inside my-2">{children}</ul>;
-		},
-		ol({ children }) {
-			return (
-				<ol className="list-decimal list-inside my-2">{children}</ol>
-			);
-		},
-		a({ href, children }) {
-			return (
-				<a
-					href={href}
-					className="text-blue-500 hover:underline"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					{children}
-				</a>
-			);
-		},
-	};
-
 	return (
 		<main className="container flex h-auto flex-col gap-4 p-4 md:p-6">
 			<Card className="flex-1">
@@ -261,18 +178,9 @@ export default function ChatPage() {
 												: "bg-primary text-primary-foreground"
 										}`}
 									>
-										{message.role === "assistant" ? (
-											<ReactMarkdown
-												remarkPlugins={[remarkGfm]}
-												components={MarkdownComponents}
-											>
-												{message.content}
-											</ReactMarkdown>
-										) : (
-											<p className="text-sm whitespace-pre-wrap">
-												{message.content}
-											</p>
-										)}
+										<p className="text-sm whitespace-pre-wrap">
+											{message.content}
+										</p>
 									</div>
 								</div>
 							))}
