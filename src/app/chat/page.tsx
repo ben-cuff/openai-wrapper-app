@@ -34,18 +34,20 @@ export default function ChatPage() {
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
-	const [copiedCode, setCopiedCode] = useState<string | null>(null);
 	const [AIModel, setAIModel] = useState("gpt-4o-mini");
 	const { data: session } = useSession();
 
 	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
-			scrollAreaRef.current.scrollTop =
-				scrollAreaRef.current.scrollHeight;
+			const scrollContainer = scrollAreaRef.current.querySelector(
+				"[data-radix-scroll-area-viewport]"
+			);
+			if (scrollContainer) {
+				scrollContainer.scrollTop = scrollContainer.scrollHeight;
+			}
 		}
 	}, []);
 
-	// Scroll to bottom when messages change
 	useEffect(() => {
 		scrollToBottom();
 	}, [messages, scrollToBottom]);
@@ -131,12 +133,6 @@ export default function ChatPage() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
-
-	const handleCopyCode = (code: string) => {
-		navigator.clipboard.writeText(code);
-		setCopiedCode(code);
-		setTimeout(() => setCopiedCode(null), 2000);
 	};
 
 	return (
@@ -228,7 +224,7 @@ export default function ChatPage() {
 							{ id: "gpt-4", label: "GPT-4" },
 							{ id: "o1-mini", label: "o1-mini" },
 							{ id: "gpt-4o", label: "GPT-4o" },
-							{ id: "gpt-4o-mini", label: "GPT-4o-mini" }
+							{ id: "gpt-4o-mini", label: "GPT-4o-mini" },
 						].map((model) => (
 							<DropdownMenuItem
 								key={model.id}
