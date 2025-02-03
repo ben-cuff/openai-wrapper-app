@@ -7,12 +7,16 @@ declare module "next-auth" {
 			id?: number;
 			username?: string | null;
 			openai_api_key?: string | null;
+			name?: string | null;
+			image?: string | null;
 		};
 	}
 	interface User {
 		id: number;
 		username: string;
 		openai_api_key: string;
+		name?: string | null;
+		image?: string | null;
 	}
 }
 

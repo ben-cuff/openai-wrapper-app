@@ -1,17 +1,17 @@
 "use client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState, useRef, useEffect, useCallback } from "react";
-import { Loader2, Copy, Check } from "lucide-react";
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { cn } from "@/lib/utils";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Check, Copy, Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import remarkGfm from "remark-gfm";
 
 interface Message {
 	id: string;
@@ -31,6 +31,7 @@ export default function ChatPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
 	const [copiedCode, setCopiedCode] = useState<string | null>(null);
+	const { data: session } = useSession();
 
 	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
@@ -46,6 +47,7 @@ export default function ChatPage() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+
 		if (!input.trim() || isLoading) return;
 
 		const userMessage: Message = {
@@ -53,38 +55,48 @@ export default function ChatPage() {
 			role: "user",
 			content: input.trim(),
 		};
-		setMessages(prev => [...prev, userMessage]);
+		setMessages((prev) => [...prev, userMessage]);
 		setInput("");
 		setIsLoading(true);
 
 		// Create a temporary message for streaming
 		const tempMessageId = crypto.randomUUID();
-		setMessages(prev => [...prev, {
-			id: tempMessageId,
-			role: "assistant",
-			content: "",
-		}]);
+		setMessages((prev) => [
+			...prev,
+			{
+				id: tempMessageId,
+				role: "assistant",
+				content: "",
+			},
+		]);
 
 		try {
-			const response = await fetch('/api/chat', {
-				method: 'POST',
+			const response = await fetch("/api/chat", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					messages: [...messages, userMessage].map(({ role, content }) => ({
-						role,
-						content,
-					})),
+					messages: [...messages, userMessage].map(
+						({ role, content }) => ({
+							role,
+							content,
+						})
+					),
+					openai_api_key: session?.user?.openai_api_key,
 				}),
 			});
 
 			if (!response.ok) {
-				throw new Error('Failed to fetch response');
+				const errorData = await response.json();
+				alert(errorData.error || "Failed to fetch response");
+				throw new Error(
+					errorData.message || "Failed to fetch response"
+				);
 			}
 
 			if (!response.body) {
-				throw new Error('No response body');
+				throw new Error("No response body");
 			}
 
 			const reader = response.body.getReader();
@@ -99,16 +111,16 @@ export default function ChatPage() {
 				content += chunk;
 
 				// Update the temporary message with the accumulated content
-				setMessages(prev => 
-					prev.map(message => 
-						message.id === tempMessageId 
-							? { ...message, content } 
+				setMessages((prev) =>
+					prev.map((message) =>
+						message.id === tempMessageId
+							? { ...message, content }
 							: message
 					)
 				);
 			}
 		} catch (error) {
-			console.error('Error:', error);
+			console.error("Error:", error);
 			// Handle error - maybe show a toast notification
 		} finally {
 			setIsLoading(false);
@@ -126,13 +138,16 @@ export default function ChatPage() {
 			return <span className="mb-2 last:mb-0 block">{children}</span>;
 		},
 		code({ node, inline, className, children, ...props }) {
-			const match = /language-(\w+)/.exec(className || '');
-			const code = String(children).replace(/\n$/, '');
-			const lang = match ? match[1] : '';
-				
+			const match = /language-(\w+)/.exec(className || "");
+			const code = String(children).replace(/\n$/, "");
+			const lang = match ? match[1] : "";
+
 			if (inline) {
 				return (
-					<code className="bg-black/10 dark:bg-white/10 rounded-md px-1 text-[16px]" {...props}>
+					<code
+						className="bg-black/10 dark:bg-white/10 rounded-md px-1 text-[16px]"
+						{...props}
+					>
 						{children}
 					</code>
 				);
@@ -157,14 +172,14 @@ export default function ChatPage() {
 					</button>
 					<div className="rounded-md overflow-hidden">
 						<SyntaxHighlighter
-							language={lang || 'text'}
+							language={lang || "text"}
 							style={oneDark}
 							customStyle={{
 								margin: 0,
-								fontSize: '16px',
-								padding: '1rem',
-								paddingTop: '2rem',
-								background: '#1a1b26',
+								fontSize: "16px",
+								padding: "1rem",
+								paddingTop: "2rem",
+								background: "#1a1b26",
 							}}
 							showLineNumbers={true}
 							wrapLines={true}
@@ -179,11 +194,13 @@ export default function ChatPage() {
 			return <ul className="list-disc list-inside my-2">{children}</ul>;
 		},
 		ol({ children }) {
-			return <ol className="list-decimal list-inside my-2">{children}</ol>;
+			return (
+				<ol className="list-decimal list-inside my-2">{children}</ol>
+			);
 		},
 		a({ href, children }) {
 			return (
-				<a 
+				<a
 					href={href}
 					className="text-blue-500 hover:underline"
 					target="_blank"
@@ -198,14 +215,19 @@ export default function ChatPage() {
 	return (
 		<main className="container flex h-screen flex-col gap-4 p-4 md:p-6">
 			<Card className="flex-1">
-				<ScrollArea className="h-[calc(100vh-8rem)]" ref={scrollAreaRef}>
+				<ScrollArea
+					className="h-[calc(100vh-8rem)]"
+					ref={scrollAreaRef}
+				>
 					<CardContent className="p-6">
 						<div className="flex flex-col gap-4">
 							{messages.map((message) => (
 								<div
 									key={message.id}
 									className={`flex gap-3 ${
-										message.role === "assistant" ? "" : "flex-row-reverse"
+										message.role === "assistant"
+											? ""
+											: "flex-row-reverse"
 									}`}
 								>
 									<Avatar>
@@ -217,7 +239,9 @@ export default function ChatPage() {
 											}
 										/>
 										<AvatarFallback>
-											{message.role === "assistant" ? "AI" : "ME"}
+											{message.role === "assistant"
+												? "AI"
+												: "ME"}
 										</AvatarFallback>
 									</Avatar>
 									<div
@@ -228,14 +252,16 @@ export default function ChatPage() {
 										}`}
 									>
 										{message.role === "assistant" ? (
-											<ReactMarkdown 
+											<ReactMarkdown
 												remarkPlugins={[remarkGfm]}
 												components={MarkdownComponents}
 											>
 												{message.content}
 											</ReactMarkdown>
 										) : (
-											<p className="text-sm whitespace-pre-wrap">{message.content}</p>
+											<p className="text-sm whitespace-pre-wrap">
+												{message.content}
+											</p>
 										)}
 									</div>
 								</div>
@@ -266,4 +292,3 @@ export default function ChatPage() {
 		</main>
 	);
 }
-

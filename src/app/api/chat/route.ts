@@ -1,7 +1,6 @@
-import { openai } from "@/lib/openai";
-
 export const runtime = "edge";
 
+import OpenAI from "openai";
 import { ChatCompletionChunk } from "openai/resources/index.mjs";
 
 async function OpenAIStream(response: AsyncIterable<ChatCompletionChunk>) {
@@ -40,7 +39,21 @@ class StreamingTextResponse extends Response {
 
 export async function POST(req: Request) {
 	try {
-		const { messages } = await req.json();
+		const { messages, openai_api_key } = await req.json();
+
+		if (!openai_api_key) {
+			return new Response(
+				JSON.stringify({
+					error: "OpenAI API key is required, please add this to your account",
+				}),
+				{
+					status: 400,
+					headers: { "Content-Type": "application/json" },
+				}
+			);
+		}
+
+		const openai = new OpenAI({ apiKey: openai_api_key });
 
 		const response = await openai.chat.completions.create({
 			model: "gpt-3.5-turbo",
@@ -51,7 +64,6 @@ export async function POST(req: Request) {
 			})),
 		});
 
-		console.log(response);
 		const stream = await OpenAIStream(response);
 		return new StreamingTextResponse(stream);
 	} catch (error) {
