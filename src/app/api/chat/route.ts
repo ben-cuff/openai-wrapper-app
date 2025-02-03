@@ -39,7 +39,7 @@ class StreamingTextResponse extends Response {
 
 export async function POST(req: Request) {
 	try {
-		const { messages, openai_api_key } = await req.json();
+		const { messages, openai_api_key, model } = await req.json();
 
 		if (!openai_api_key) {
 			return new Response(
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
 		const openai = new OpenAI({ apiKey: openai_api_key });
 
 		const response = await openai.chat.completions.create({
-			model: "gpt-3.5-turbo",
+			model: model,
 			stream: true,
 			messages: messages.map((message: any) => ({
 				content: message.content,

@@ -3,6 +3,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Check, Copy, Loader2 } from "lucide-react";
@@ -31,6 +39,7 @@ export default function ChatPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
 	const [copiedCode, setCopiedCode] = useState<string | null>(null);
+	const [AIModel, setAIModel] = useState("gpt-4o");
 	const { data: session } = useSession();
 
 	const scrollToBottom = useCallback(() => {
@@ -83,6 +92,7 @@ export default function ChatPage() {
 							content,
 						})
 					),
+					model: AIModel,
 					openai_api_key: session?.user?.openai_api_key,
 				}),
 			});
@@ -278,6 +288,49 @@ export default function ChatPage() {
 					className="flex-1"
 					disabled={isLoading}
 				/>
+				<DropdownMenu>
+					<DropdownMenuTrigger>Models ↑</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						<DropdownMenuLabel>AI Models</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem
+							onClick={() => setAIModel("gpt-3.5-turbo")}
+							className="flex items-center justify-between"
+						>
+							GPT-3.5 Turbo
+							{AIModel === "gpt-3.5-turbo" && (
+								<Check className="h-4 w-4" />
+							)}
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() => setAIModel("gpt-4")}
+							className="flex items-center justify-between"
+						>
+							GPT-4
+							{AIModel === "gpt-4" && (
+								<Check className="h-4 w-4" />
+							)}
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() => setAIModel("o1-mini")}
+							className="flex items-center justify-between"
+						>
+							o1-mini
+							{AIModel === "o1-mini" && (
+								<Check className="h-4 w-4" />
+							)}
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() => setAIModel("gpt-4o")}
+							className="flex items-center justify-between"
+						>
+							GPT-4o
+							{AIModel === "gpt-4o" && (
+								<Check className="h-4 w-4" />
+							)}
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
 				<Button type="submit" disabled={isLoading}>
 					{isLoading ? (
 						<>
