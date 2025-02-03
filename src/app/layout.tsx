@@ -22,7 +22,7 @@ export default function RootLayout({
 					<SessionProvider>
 						<div className="relative flex min-h-screen flex-col">
 							<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-								<NavBar></NavBar>
+								<NavBar />
 							</header>
 							<main className="flex-1">{children}</main>
 						</div>
