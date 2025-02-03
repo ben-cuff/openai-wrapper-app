@@ -39,7 +39,7 @@ export default function ChatPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
 	const [copiedCode, setCopiedCode] = useState<string | null>(null);
-	const [AIModel, setAIModel] = useState("gpt-4o");
+	const [AIModel, setAIModel] = useState("gpt-4o-mini");
 	const { data: session } = useSession();
 
 	const scrollToBottom = useCallback(() => {
@@ -348,6 +348,15 @@ export default function ChatPage() {
 						>
 							GPT-4o
 							{AIModel === "gpt-4o" && (
+								<Check className="h-4 w-4" />
+							)}
+						</DropdownMenuItem>
+						<DropdownMenuItem
+							onClick={() => setAIModel("gpt-4o-mini")}
+							className="flex items-center justify-between"
+						>
+							GPT-4o-mini
+							{AIModel === "gpt-4o-mini" && (
 								<Check className="h-4 w-4" />
 							)}
 						</DropdownMenuItem>
