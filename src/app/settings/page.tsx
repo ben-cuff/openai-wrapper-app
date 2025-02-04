@@ -4,16 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Check, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Check, X } from "lucide-react";
 
 export default function SettingsPage() {
 	const { data: session } = useSession();
 	const [apiKey, setApiKey] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const router = useRouter();
 
 	const hasApiKey = Boolean(session?.user?.openai_api_key);
 
@@ -41,10 +39,9 @@ export default function SettingsPage() {
 
 			// Sign out to force a complete session refresh
 			await signOut({ redirect: false });
-			
-			// Reload the page which will trigger a new sign-in
-			window.location.href = '/signin';
 
+			// Reload the page which will trigger a new sign-in
+			window.location.href = "/signin";
 		} catch (error) {
 			console.error("Error updating API key:", error);
 			alert("Failed to update API key");
