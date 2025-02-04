@@ -39,7 +39,7 @@ class StreamingTextResponse extends Response {
 
 export async function POST(req: Request) {
 	try {
-		const { messages, openai_api_key, model } = await req.json();
+		const { messages, openai_api_key, model, url } = await req.json();
 
 		if (!openai_api_key) {
 			return new Response(
@@ -53,7 +53,10 @@ export async function POST(req: Request) {
 			);
 		}
 
-		const openai = new OpenAI({ apiKey: openai_api_key });
+		const openai = new OpenAI({
+			apiKey: openai_api_key,
+			baseURL: url,
+		});
 
 		const response = await openai.chat.completions.create({
 			model: model,

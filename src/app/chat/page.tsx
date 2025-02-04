@@ -125,6 +125,7 @@ export default function ChatPage() {
 					),
 					model: AIModel,
 					openai_api_key: session?.user?.openai_api_key,
+					url: "https://api.openai.com/v1",
 				}),
 			});
 
@@ -196,8 +197,8 @@ export default function ChatPage() {
 	};
 
 	return (
-		<main className="container flex h-auto flex-row gap-4 p-4 md:p-6">
-			<div className="w-1/5 h-auto">
+		<main className="container flex h-auto flex-row gap-4 p-4 md:p-6 overflow-hidden">
+			<div className="h-auto overflow-y-auto">
 				<SidebarProvider>
 					<Sidebar>
 						<SidebarContent>
@@ -232,8 +233,17 @@ export default function ChatPage() {
 										>
 											<div className="flex items-center justify-between">
 												<div className="flex flex-col">
-													<span className="font-medium text-gray-900 dark:text-gray-100">
-														{conversation.messages.messages[conversation.messages.messages.length - 1].content.split(" ").slice(0, 3).join(" ")}...
+													<span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+														{conversation.messages.messages[
+															conversation
+																.messages
+																.messages
+																.length - 1
+														].content
+															.split(" ")
+															.slice(0, 5)
+															.join(" ")}
+														...
 													</span>
 													<span className="text-xs text-gray-500 dark:text-gray-400">
 														{
@@ -276,7 +286,7 @@ export default function ChatPage() {
 					</Sidebar>
 				</SidebarProvider>
 			</div>
-			<div className="w-full h-auto">
+			<div className="flex-1 h-auto">
 				<Card>
 					<ScrollArea
 						className="h-[calc(100vh-10rem)]"
