@@ -77,3 +77,29 @@ export async function POST(req: Request) {
 		return new Response("Invalid request", { status: 400 });
 	}
 }
+
+export async function DELETE(req: Request) {
+	try {
+		const url = new URL(req.url);
+		const segments = url.pathname.split("/");
+		const userId = Number(segments[segments.length - 2]);
+
+		await prismaLib.conversation.deleteMany({
+			where: {
+				userId: userId,
+			},
+		});
+
+		return new Response("All conversations deleted", {
+			status: 200,
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+	} catch (error) {
+		return new Response(JSON.stringify({ error: error }), {
+			status: 500,
+			headers: { "Content-Type": "application/json" },
+		});
+	}
+}
