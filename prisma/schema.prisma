@@ -8,10 +8,20 @@ datasource db {
 }
 
 model Account {
-  id                 Int       @id @default(autoincrement())
-  username           String    @unique
+  id                 Int            @id @default(autoincrement())
+  username           String         @unique
   hashed_password    String
   openai_api_key     String?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  conversations      Conversation[]
+}
+
+model Conversation {
+  id          String     @id @default(uuid())
+  userId      Int
+  messages    Json
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        Account    @relation(fields: [userId], references: [id])
 }
