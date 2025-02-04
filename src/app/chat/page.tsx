@@ -40,7 +40,7 @@ export default function ChatPage() {
 	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
 			const scrollContainer = scrollAreaRef.current.querySelector(
-				"[data-radix-scroll-area-viewport]"
+				"[data-radix-scroll-area-viewport]",
 			);
 			if (scrollContainer) {
 				scrollContainer.scrollTop = scrollContainer.scrollHeight;
@@ -88,7 +88,7 @@ export default function ChatPage() {
 						({ role, content }) => ({
 							role,
 							content,
-						})
+						}),
 					),
 					model: AIModel,
 					openai_api_key: session?.user?.openai_api_key,
@@ -99,7 +99,7 @@ export default function ChatPage() {
 				const errorData = await response.json();
 				alert(errorData.error || "Failed to fetch response");
 				throw new Error(
-					errorData.message || "Failed to fetch response"
+					errorData.message || "Failed to fetch response",
 				);
 			}
 
@@ -123,8 +123,8 @@ export default function ChatPage() {
 					prev.map((message) =>
 						message.id === tempMessageId
 							? { ...message, content }
-							: message
-					)
+							: message,
+					),
 				);
 			}
 		} catch (error) {
