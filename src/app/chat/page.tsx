@@ -31,6 +31,9 @@ export default function ChatPage() {
 			content: "Hello! How can I help you today?",
 		},
 	]);
+	const [conversationId, setConversationId] = useState<string>(
+		crypto.randomUUID()
+	);
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -40,7 +43,7 @@ export default function ChatPage() {
 	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
 			const scrollContainer = scrollAreaRef.current.querySelector(
-				"[data-radix-scroll-area-viewport]",
+				"[data-radix-scroll-area-viewport]"
 			);
 			if (scrollContainer) {
 				scrollContainer.scrollTop = scrollContainer.scrollHeight;
@@ -88,7 +91,7 @@ export default function ChatPage() {
 						({ role, content }) => ({
 							role,
 							content,
-						}),
+						})
 					),
 					model: AIModel,
 					openai_api_key: session?.user?.openai_api_key,
@@ -99,7 +102,7 @@ export default function ChatPage() {
 				const errorData = await response.json();
 				alert(errorData.error || "Failed to fetch response");
 				throw new Error(
-					errorData.message || "Failed to fetch response",
+					errorData.message || "Failed to fetch response"
 				);
 			}
 
@@ -123,10 +126,40 @@ export default function ChatPage() {
 					prev.map((message) =>
 						message.id === tempMessageId
 							? { ...message, content }
-							: message,
-					),
+							: message
+					)
 				);
 			}
+
+			const completeMessages = {
+				conversationId: conversationId,
+				userId: session?.user.id,
+				messages: [
+					...messages,
+					userMessage,
+					{
+						id: tempMessageId,
+						role: "assistant",
+						content: content,
+					},
+				],
+			};
+
+			console.log(
+				"Complete messages:",
+				JSON.stringify(completeMessages, null, 2)
+			);
+
+			// Make the API call with the complete messages
+			// await fetch("/api/your-post-processing-endpoint", {
+			// 	method: "POST",
+			// 	headers: {
+			// 		"Content-Type": "application/json",
+			// 	},
+			// 	body: JSON.stringify({
+			// 		messages: completeMessages,
+			// 	}),
+			// });
 		} catch (error) {
 			console.error("Error:", error);
 			// Handle error - maybe show a toast notification
