@@ -19,6 +19,7 @@ import {
 	SidebarMenuItem,
 	SidebarProvider,
 } from "@/components/ui/sidebar";
+import { deleteConversation } from "@/util/delete-conversation";
 import { Check, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -200,7 +201,7 @@ export default function ChatPage() {
 				<SidebarProvider>
 					<Sidebar>
 						<SidebarContent>
-							<h2 className="text-lg font-semibold mb-4">
+							<h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
 								Conversations
 							</h2>
 							<div className="flex flex-col gap-2">
@@ -222,26 +223,53 @@ export default function ChatPage() {
 														.messages
 												);
 											}}
-											className={`cursor-pointer p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 ${
+											className={`cursor-pointer p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 dark:hover:bg-gray-700 ${
 												conversation.id ===
 												conversationId
-													? "bg-gray-200 dark:bg-gray-700"
-													: ""
+													? "bg-gray-100 dark:bg-gray-700 shadow-sm"
+													: "bg-white dark:bg-gray-800"
 											}`}
 										>
 											<div className="flex items-center justify-between">
-												<span className="font-medium">
-													Conversation{" "}
-													{conversation.id}
-												</span>
-												<span className="text-xs text-gray-500">
-													{
-														conversation.messages
-															.length
-													}{" "}
-													messages
+												<div className="flex flex-col">
+													<span className="font-medium text-gray-900 dark:text-gray-100">
+														Conversation{" "}
+														{conversation.id}
+													</span>
+													<span className="text-xs text-gray-500 dark:text-gray-400">
+														{
+															conversation
+																.messages
+																.messages.length
+														}{" "}
+														messages
+													</span>
+												</div>
+												<span className="text-xs text-gray-500 dark:text-gray-400">
+													{new Date(
+														conversation.updatedAt
+													).toLocaleString()}
 												</span>
 											</div>
+											<Button
+												onClick={async () => {
+													await deleteConversation(
+														session?.user.id || 0,
+														conversation.id
+													);
+													setMessages([
+														{
+															id: "initial",
+															role: "assistant",
+															content:
+																"Hello! How can I help you today?",
+														},
+													]);
+													setConversationId(
+														crypto.randomUUID()
+													);
+												}}
+											></Button>
 										</SidebarMenuItem>
 									))}
 							</div>
