@@ -16,7 +16,7 @@ export default function SettingsPage() {
 
 	const hasApiKey = Boolean(session?.user?.openai_api_key);
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmitOpenaiKey = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setIsLoading(true);
 
@@ -38,12 +38,39 @@ export default function SettingsPage() {
 				throw new Error("Failed to update API key");
 			}
 
-			setIsLoading(false);
 			setApiKey("");
-			reloadSession();
 		} catch (error) {
 			console.error("Error updating API key:", error);
 			alert("Failed to update API key");
+		} finally {
+			setIsLoading(false);
+			reloadSession();
+			setApiKey("");
+		}
+	};
+
+	const handleSubmitDeleteHistory = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!confirm("Are you sure you want to delete all message history?")) {
+			return;
+		}
+		setIsLoading(true);
+		try {
+			const response = await fetch(
+				`/api/account/${session?.user?.id}/message`,
+				{
+					method: "DELETE",
+				}
+			);
+			if (!response.ok) {
+				throw new Error(
+					"Failed to delete message history. This action is irreversible."
+				);
+			}
+		} catch (error) {
+			console.error("Error deleting message history:", error);
+			alert("Failed to delete message history");
+		} finally {
 			setIsLoading(false);
 		}
 	};
@@ -71,7 +98,10 @@ export default function SettingsPage() {
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<form onSubmit={handleSubmit} className="space-y-4">
+					<form
+						onSubmit={handleSubmitOpenaiKey}
+						className="space-y-4"
+					>
 						<div className="space-y-2">
 							<Label htmlFor="apiKey">OpenAI API Key</Label>
 							<Input
@@ -94,6 +124,22 @@ export default function SettingsPage() {
 						</div>
 						<Button type="submit" disabled={isLoading}>
 							{isLoading ? "Saving..." : "Save Changes"}
+						</Button>
+					</form>
+				</CardContent>
+				<CardContent>
+					<form
+						onSubmit={handleSubmitDeleteHistory}
+						className="space-y-4"
+					>
+						<Button
+							type="submit"
+							variant="destructive"
+							disabled={isLoading}
+						>
+							{isLoading
+								? "Deleting..."
+								: "Delete All Message History"}
 						</Button>
 					</form>
 				</CardContent>
