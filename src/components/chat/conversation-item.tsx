@@ -15,7 +15,7 @@ export default function ConversationItem({
 	conversationId: string;
 	setConversationId: React.Dispatch<React.SetStateAction<string>>;
 	setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-	session: any;
+	session: { user: { id: number } };
 	setUpdateMessage: React.Dispatch<React.SetStateAction<boolean>>;
 	updateMessage: boolean;
 }) {
@@ -45,12 +45,12 @@ export default function ConversationItem({
 								.slice(0, 4)
 								.join(" ")}
 						</p>
-                        <div className="flex justify-between text-[10px] text-gray-500 dark:text-gray-400">
-                            <span>
-                                {conversation.messages.messages.length} msgs
-                            </span>
-                            <span>{formatDate(conversation.updatedAt)}</span>
-                        </div>
+						<div className="flex justify-between text-[10px] text-gray-500 dark:text-gray-400">
+							<span>
+								{conversation.messages.messages.length} msgs
+							</span>
+							<span>{formatDate(conversation.updatedAt)}</span>
+						</div>
 					</div>
 					<Button
 						variant="ghost"
