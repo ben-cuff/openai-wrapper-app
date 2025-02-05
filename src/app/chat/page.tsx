@@ -53,6 +53,7 @@ export default function ChatPage() {
 	const [AIModel, setAIModel] = useState("gpt-4o-mini");
 	const { data: session } = useSession();
 	const [conversations, setConversations] = useState<Conversation[]>([]);
+	const [updateMessage, setUpdateMessage] = useState(false);
 
 	useEffect(() => {
 		const fetchConversations = async () => {
@@ -68,7 +69,7 @@ export default function ChatPage() {
 		};
 
 		fetchConversations();
-	}, [session?.user?.id, isLoading]);
+	}, [session?.user?.id, isLoading, updateMessage]);
 
 	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
@@ -276,8 +277,9 @@ export default function ChatPage() {
 													setConversationId(
 														crypto.randomUUID()
 													);
-													setIsLoading(!isLoading);
-													setIsLoading(!isLoading);
+													setUpdateMessage(
+														!updateMessage
+													);
 												}}
 											></Button>
 										</SidebarMenuItem>
@@ -413,8 +415,6 @@ export default function ChatPage() {
 									},
 								]);
 								setConversationId(crypto.randomUUID());
-								setIsLoading(!isLoading);
-								setIsLoading(!isLoading);
 							}}
 						>
 							New Chat
