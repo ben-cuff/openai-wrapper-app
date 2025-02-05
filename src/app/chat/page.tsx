@@ -1,9 +1,8 @@
 "use client";
 
+import ChatMessages from "@/components/chat/chat-area";
 import ConversationItem from "@/components/chat/conversation-item";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -13,21 +12,15 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarProvider,
 } from "@/components/ui/sidebar";
+import { Message } from "@/types/message";
 import { Check, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-export interface Message {
-	id: string;
-	role: "user" | "assistant";
-	content: string;
-}
 
 interface Conversation {
 	id: string;
@@ -221,7 +214,11 @@ export default function ChatPage() {
 												setConversationId
 											}
 											setMessages={setMessages}
-											session={session && session.user?.id ? session : {} as Session}
+											session={
+												session && session.user?.id
+													? session
+													: ({} as Session)
+											}
 											setUpdateMessage={setUpdateMessage}
 											updateMessage={updateMessage}
 										/>
@@ -232,53 +229,10 @@ export default function ChatPage() {
 				</SidebarProvider>
 			</div>
 			<div className="flex-1 h-auto">
-				<Card>
-					<ScrollArea
-						className="h-[calc(100vh-10rem)]"
-						ref={scrollAreaRef}
-					>
-						<CardContent className="p-6">
-							<div className="flex flex-col gap-4">
-								{messages.map((message) => (
-									<div
-										key={message.id}
-										className={`flex gap-3 ${
-											message.role === "assistant"
-												? ""
-												: "flex-row-reverse"
-										}`}
-									>
-										<Avatar>
-											<AvatarImage
-												src={
-													message.role === "assistant"
-														? "/bot-avatar.png"
-														: "/user-avatar.png"
-												}
-											/>
-											<AvatarFallback>
-												{message.role === "assistant"
-													? "AI"
-													: "ME"}
-											</AvatarFallback>
-										</Avatar>
-										<div
-											className={`rounded-lg px-4 py-2 max-w-[80%] ${
-												message.role === "assistant"
-													? "bg-muted prose prose-sm dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 max-w-none"
-													: "bg-primary text-primary-foreground"
-											}`}
-										>
-											<p className="text-sm whitespace-pre-wrap">
-												{message.content}
-											</p>
-										</div>
-									</div>
-								))}
-							</div>
-						</CardContent>
-					</ScrollArea>
-				</Card>
+				<ChatMessages
+					messages={messages}
+					scrollAreaRef={scrollAreaRef}
+				/>
 				<form onSubmit={handleSubmit} className="flex gap-2">
 					<Input
 						placeholder="Type your message here..."
