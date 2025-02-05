@@ -221,7 +221,7 @@ export default function ChatPage() {
 												setConversationId
 											}
 											setMessages={setMessages}
-											session={session}
+											session={session && session.user?.id ? session : {} as Session}
 											setUpdateMessage={setUpdateMessage}
 											updateMessage={updateMessage}
 										/>

@@ -1,4 +1,5 @@
 import { deleteConversation } from "@/util/delete-conversation";
+import { Session } from "next-auth";
 import { Button } from "../ui/button";
 import { SidebarMenuButton } from "../ui/sidebar";
 
@@ -15,7 +16,7 @@ export default function ConversationItem({
 	conversationId: string;
 	setConversationId: React.Dispatch<React.SetStateAction<string>>;
 	setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
-	session: { user: { id: number } };
+	session: Session;
 	setUpdateMessage: React.Dispatch<React.SetStateAction<boolean>>;
 	updateMessage: boolean;
 }) {
@@ -42,8 +43,9 @@ export default function ConversationItem({
 								conversation.messages.messages.length - 1
 							].content
 								.split(" ")
-								.slice(0, 4)
-								.join(" ")}...
+								.slice(0, 6)
+								.join(" ")}
+							...
 						</p>
 						<div className="flex justify-between text-[10px] text-gray-500 dark:text-gray-400">
 							<span>
