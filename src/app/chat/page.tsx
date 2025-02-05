@@ -190,7 +190,6 @@ export default function ChatPage() {
 			}
 		} catch (error) {
 			console.error("Error:", error);
-			// Handle error - maybe show a toast notification
 		} finally {
 			setIsLoading(false);
 		}
