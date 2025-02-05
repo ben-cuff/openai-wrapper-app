@@ -68,7 +68,7 @@ export default function ChatPage() {
 		};
 
 		fetchConversations();
-	}, [session?.user?.id, messages]);
+	}, [session?.user?.id, isLoading]);
 
 	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
@@ -276,6 +276,8 @@ export default function ChatPage() {
 													setConversationId(
 														crypto.randomUUID()
 													);
+													setIsLoading(!isLoading);
+													setIsLoading(!isLoading);
 												}}
 											></Button>
 										</SidebarMenuItem>
@@ -411,6 +413,8 @@ export default function ChatPage() {
 									},
 								]);
 								setConversationId(crypto.randomUUID());
+								setIsLoading(!isLoading);
+								setIsLoading(!isLoading);
 							}}
 						>
 							New Chat
