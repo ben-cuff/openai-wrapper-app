@@ -47,9 +47,6 @@ export async function POST(req: Request) {
 		const segments = url.pathname.split("/");
 		const userId = Number(segments[segments.length - 2]);
 
-		console.log(conversationId);
-		console.log(JSON.stringify(messages, null, 2));
-
 		let conversation = await prismaLib.conversation.findUnique({
 			where: {
 				id: conversationId,
