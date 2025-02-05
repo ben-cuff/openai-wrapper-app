@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { reloadSession } from "@/util/reload-session";
 import { Check, X } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export default function SettingsPage() {
@@ -37,11 +38,9 @@ export default function SettingsPage() {
 				throw new Error("Failed to update API key");
 			}
 
-			// Sign out to force a complete session refresh
-			await signOut({ redirect: false });
-
-			// Reload the page which will trigger a new sign-in
-			window.location.href = "/signin";
+			setIsLoading(false);
+			setApiKey("");
+			reloadSession();
 		} catch (error) {
 			console.error("Error updating API key:", error);
 			alert("Failed to update API key");
@@ -80,7 +79,16 @@ export default function SettingsPage() {
 								type="password"
 								value={apiKey}
 								onChange={(e) => setApiKey(e.target.value)}
-								placeholder="sk-..."
+								placeholder={
+									session?.user?.openai_api_key != null &&
+									session?.user?.openai_api_key != ""
+										? `${String(
+												session?.user?.openai_api_key
+										  ).slice(0, 3)}...${String(
+												session?.user?.openai_api_key
+										  ).slice(-3)}`
+										: "sk-..."
+								}
 								required
 							/>
 						</div>
