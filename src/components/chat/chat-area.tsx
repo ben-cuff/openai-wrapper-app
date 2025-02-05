@@ -8,7 +8,7 @@ export default function ChatMessages({
 	scrollAreaRef,
 }: {
 	messages: Message[];
-	scrollAreaRef: string;
+	scrollAreaRef: RefObject<HTMLDivElement>;
 }) {
 	return (
 		<Card>
