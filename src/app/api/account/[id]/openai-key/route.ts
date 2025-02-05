@@ -48,6 +48,7 @@ export async function GET(req: Request) {
 				headers: { "Content-Type": "application/json" },
 			});
 		}
+
 		return new Response(
 			JSON.stringify({ openai_api_key: user.openai_api_key }),
 			{

@@ -5,7 +5,19 @@ export async function POST(req: Request) {
 	const { username, password } = await req.json();
 	const hashed_password = createHash("sha256").update(password).digest("hex");
 
-	console.log(username, password, hashed_password);
+	if (!username || !password) {
+		return new Response(
+			JSON.stringify({
+				success: false,
+				error: "Missing username or password",
+			}),
+			{
+				status: 400,
+				headers: { "Content-Type": "application/json" },
+			}
+		);
+	}
+
 	let user;
 	try {
 		user = await prismaLib.account.create({

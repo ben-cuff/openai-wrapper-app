@@ -12,6 +12,15 @@ export async function GET(req: Request) {
 			},
 		});
 
+		if (!conversations) {
+			return new Response("No conversations found", {
+				status: 404,
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+		}
+
 		return new Response(JSON.stringify(conversations), {
 			status: 200,
 			headers: {
@@ -68,7 +77,7 @@ export async function POST(req: Request) {
 		}
 
 		return new Response(JSON.stringify(conversation), {
-			status: 200,
+			status: 201,
 			headers: {
 				"Content-Type": "application/json",
 			},
