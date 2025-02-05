@@ -74,7 +74,10 @@ export async function POST(req: Request) {
 			},
 		});
 	} catch (error) {
-		return new Response("Invalid request", { status: 400 });
+		return new Response(JSON.stringify({ error: error }), {
+			status: 400,
+			headers: { "Content-Type": "application/json" },
+		});
 	}
 }
 

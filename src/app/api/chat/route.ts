@@ -1,5 +1,6 @@
-export const runtime = "edge";
+// export const runtime = "edge";
 
+import { Message } from "@/app/chat/page";
 import OpenAI from "openai";
 import { ChatCompletionChunk } from "openai/resources/index.mjs";
 
@@ -61,7 +62,7 @@ export async function POST(req: Request) {
 		const response = await openai.chat.completions.create({
 			model: model,
 			stream: true,
-			messages: messages.map((message: any) => ({
+			messages: messages.map((message: Message) => ({
 				content: message.content,
 				role: message.role,
 			})),

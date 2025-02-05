@@ -24,7 +24,7 @@ import { Check, Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-interface Message {
+export interface Message {
 	id: string;
 	role: "user" | "assistant";
 	content: string;

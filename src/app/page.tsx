@@ -88,7 +88,7 @@ export default function Home() {
 											</div>
 										</div>
 										<p className="mt-4 text-muted-foreground">
-											"{testimonial.quote}"
+											&quot;{testimonial.quote}&quot;
 										</p>
 									</CardContent>
 								</Card>
