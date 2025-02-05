@@ -43,7 +43,7 @@ export default function ConversationItem({
 							].content
 								.split(" ")
 								.slice(0, 4)
-								.join(" ")}
+								.join(" ")}...
 						</p>
 						<div className="flex justify-between text-[10px] text-gray-500 dark:text-gray-400">
 							<span>
