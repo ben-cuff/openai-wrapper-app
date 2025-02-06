@@ -34,7 +34,7 @@ export default function ConversationItem({
 					setConversationId(conversation.id);
 					setMessages(conversation.messages.messages);
 				}}
-				className="cursor-pointer w-full"
+				className="cursor-pointer w-full min-h-10"
 			>
 				<div className="flex items-center justify-between w-full">
 					<div className="flex-1 min-w-0 pr-2">
