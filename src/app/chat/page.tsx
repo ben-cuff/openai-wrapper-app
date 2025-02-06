@@ -8,7 +8,10 @@ import { Input } from "@/components/ui/input";
 import {
 	Sidebar,
 	SidebarContent,
-	SidebarProvider,
+	SidebarHeader,
+	SidebarSeparator,
+	SidebarTrigger,
+	useSidebar,
 } from "@/components/ui/sidebar";
 import { Message } from "@/types/message";
 import { Loader2 } from "lucide-react";
@@ -39,6 +42,7 @@ export default function ChatPage() {
 	const { data: session } = useSession();
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 	const [updateMessage, setUpdateMessage] = useState(false);
+	const sidebar = useSidebar();
 
 	useEffect(() => {
 		const fetchConversations = async () => {
@@ -184,42 +188,44 @@ export default function ChatPage() {
 	return (
 		<main className="container flex h-auto flex-row gap-4 p-4 md:p-6 overflow-hidden">
 			<div className="h-auto overflow-y-auto">
-				<SidebarProvider>
-					<Sidebar>
-						<SidebarContent className="w-full">
-							{" "}
-							<h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200 px-2">
-								Conversations
-							</h2>
-							<div className="flex flex-col gap-2 pt-2 w-full">
-								{conversations
-									.sort(
-										(a, b) =>
-											new Date(b.updatedAt).getTime() -
-											new Date(a.updatedAt).getTime()
-									)
-									.map((conversation) => (
-										<ConversationItem
-											key={conversation.id}
-											conversation={conversation}
-											conversationId={conversationId}
-											setConversationId={
-												setConversationId
-											}
-											setMessages={setMessages}
-											session={
-												session && session.user?.id
-													? session
-													: ({} as Session)
-											}
-											setUpdateMessage={setUpdateMessage}
-											updateMessage={updateMessage}
-										/>
-									))}
-							</div>
-						</SidebarContent>
-					</Sidebar>
-				</SidebarProvider>
+				<Sidebar>
+					<SidebarHeader className="w-full mt-14 text-xl">
+						<span className="w-full flex">
+							Conversations
+							<SidebarTrigger className="ml-auto" />
+						</span>
+					</SidebarHeader>
+					<SidebarSeparator className="mb-2" />
+					<SidebarContent className="w-full">
+						<div className="flex flex-col gap-2 w-full">
+							{conversations
+								.sort(
+									(a, b) =>
+										new Date(b.updatedAt).getTime() -
+										new Date(a.updatedAt).getTime()
+								)
+								.map((conversation) => (
+									<ConversationItem
+										key={conversation.id}
+										conversation={conversation}
+										conversationId={conversationId}
+										setConversationId={setConversationId}
+										setMessages={setMessages}
+										session={
+											session && session.user?.id
+												? session
+												: ({} as Session)
+										}
+										setUpdateMessage={setUpdateMessage}
+										updateMessage={updateMessage}
+									/>
+								))}
+						</div>
+					</SidebarContent>
+				</Sidebar>
+			</div>
+			<div className="flex-shrink-0">
+				{!sidebar.open && <SidebarTrigger />}
 			</div>
 			<div className="flex-1 h-auto">
 				<ChatMessages
