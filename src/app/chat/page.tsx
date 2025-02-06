@@ -34,7 +34,7 @@ export default function ChatPage() {
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
-	const [AIModel, setAIModel] = useState("gpt-4o-mini");
+	const [AIModel, setAIModel] = useState("o1-preview");
 	const { data: session } = useSession();
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 	const [updateMessage, setUpdateMessage] = useState(false);
