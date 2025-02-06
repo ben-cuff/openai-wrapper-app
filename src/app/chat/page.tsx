@@ -13,16 +13,12 @@ import {
 	SidebarTrigger,
 	useSidebar,
 } from "@/components/ui/sidebar";
+import { Conversation } from "@/types/conversation";
 import { Message } from "@/types/message";
 import { Loader2 } from "lucide-react";
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-
-interface Conversation {
-	id: string;
-	messages: { messages: Message[] };
-	updatedAt: string;
-}
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([

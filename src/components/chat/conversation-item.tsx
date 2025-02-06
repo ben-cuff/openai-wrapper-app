@@ -1,3 +1,5 @@
+import { Conversation } from "@/types/conversation";
+import { Message } from "@/types/message";
 import { deleteConversation } from "@/util/delete-conversation";
 import { Session } from "next-auth";
 import { Button } from "../ui/button";

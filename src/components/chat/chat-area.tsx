@@ -1,4 +1,5 @@
 import { Message } from "@/types/message";
+import { RefObject } from "react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Card, CardContent } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
@@ -8,7 +9,7 @@ export default function ChatMessages({
 	scrollAreaRef,
 }: {
 	messages: Message[];
-	scrollAreaRef: RefObject<HTMLDivElement>;
+	scrollAreaRef: RefObject<HTMLDivElement | null>;
 }) {
 	return (
 		<Card>

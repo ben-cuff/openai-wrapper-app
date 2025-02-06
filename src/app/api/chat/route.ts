@@ -1,6 +1,6 @@
 // export const runtime = "edge";
 
-import { Message } from "@/app/chat/page";
+import { Message } from "@/types/message";
 import OpenAI from "openai";
 import { ChatCompletionChunk } from "openai/resources/index.mjs";
 
