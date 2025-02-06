@@ -1,3 +1,4 @@
+import { aiModels } from "@/models/ai-models";
 import { Check } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -44,13 +45,7 @@ export default function AIModelDropdown({
 			<DropdownMenuContent>
 				<DropdownMenuLabel>AI Models</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{[
-					{ id: "gpt-3.5-turbo", label: "GPT-3.5 Turbo" },
-					{ id: "gpt-4", label: "GPT-4" },
-					{ id: "o1-mini", label: "o1-mini" },
-					{ id: "gpt-4o", label: "GPT-4o" },
-					{ id: "gpt-4o-mini", label: "GPT-4o-mini" },
-				].map((model) => (
+				{aiModels.map((model) => (
 					<DropdownMenuItem
 						key={model.id}
 						onClick={() => setAIModel(model.id)}
