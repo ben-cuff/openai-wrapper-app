@@ -12,6 +12,15 @@ export async function GET(req: Request) {
 			},
 		});
 
+		if (!conversations) {
+			return new Response("No conversations found", {
+				status: 404,
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+		}
+
 		return new Response(JSON.stringify(conversations), {
 			status: 200,
 			headers: {
@@ -37,9 +46,6 @@ export async function POST(req: Request) {
 		const url = new URL(req.url);
 		const segments = url.pathname.split("/");
 		const userId = Number(segments[segments.length - 2]);
-
-		console.log(conversationId);
-		console.log(JSON.stringify(messages, null, 2));
 
 		let conversation = await prismaLib.conversation.findUnique({
 			where: {
@@ -68,7 +74,7 @@ export async function POST(req: Request) {
 		}
 
 		return new Response(JSON.stringify(conversation), {
-			status: 200,
+			status: 201,
 			headers: {
 				"Content-Type": "application/json",
 			},

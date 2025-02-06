@@ -42,8 +42,6 @@ export const authOptions: NextAuthOptions = {
 
 				const user = await res.json();
 
-				console.log(user);
-
 				if (res.ok && user) {
 					return user.user;
 				} else {
@@ -65,7 +63,9 @@ export const authOptions: NextAuthOptions = {
 			if (session.user) {
 				session.user.id = token.id as number;
 				session.user.username = token.username as string;
-				session.user.openai_api_key = token.openai_api_key as string;
+				session.user.openai_api_key = await getOpenaiApiKey(
+					session.user.id
+				);
 			}
 			return session;
 		},
@@ -74,3 +74,24 @@ export const authOptions: NextAuthOptions = {
 		signIn: "/signin",
 	},
 };
+
+async function getOpenaiApiKey(id: number) {
+	try {
+		const response = await fetch(
+			`http://localhost:3000/api/account/${id}/openai-key`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					"x-api-key": `${process.env.X_API_KEY}`,
+				},
+			}
+		);
+
+		const res = await response.json();
+		return res.openai_api_key;
+	} catch (error) {
+		console.error(error);
+		return null;
+	}
+}

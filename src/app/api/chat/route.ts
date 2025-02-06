@@ -1,6 +1,6 @@
 // export const runtime = "edge";
 
-import { Message } from "@/app/chat/page";
+import { Message } from "@/types/message";
 import OpenAI from "openai";
 import { ChatCompletionChunk } from "openai/resources/index.mjs";
 
@@ -42,6 +42,29 @@ export async function POST(req: Request) {
 	try {
 		const { messages, openai_api_key, model, url } = await req.json();
 
+		if (!messages || !Array.isArray(messages)) {
+			return new Response(
+				JSON.stringify({
+					error: "Invalid or missing 'messages' field",
+				}),
+				{ status: 400, headers: { "Content-Type": "application/json" } }
+			);
+		}
+
+		if (!model) {
+			return new Response(
+				JSON.stringify({ error: "Missing 'model' field" }),
+				{ status: 400, headers: { "Content-Type": "application/json" } }
+			);
+		}
+
+		if (!url) {
+			return new Response(
+				JSON.stringify({ error: "Missing 'url' field" }),
+				{ status: 400, headers: { "Content-Type": "application/json" } }
+			);
+		}
+
 		if (!openai_api_key) {
 			return new Response(
 				JSON.stringify({
@@ -73,7 +96,9 @@ export async function POST(req: Request) {
 	} catch (error) {
 		console.error("Error:", error);
 		return new Response(
-			JSON.stringify({ error: "Failed to generate response" }),
+			JSON.stringify({
+				error: "Failed to generate response, it is likely that your API key is broken or out of credit",
+			}),
 			{ status: 500 }
 		);
 	}

@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 			return new Response(
 				JSON.stringify({ message: "Username or password incorrect" }),
 				{
-					status: 401,
+					status: 404,
 					headers: { "Content-Type": "application/json" },
 				}
 			);
