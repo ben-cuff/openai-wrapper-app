@@ -1,10 +1,6 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
 
-type LayoutProps = {
-	children: React.ReactNode;
-};
-
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children }: { children: React.ReactNode }) {
 	return <SidebarProvider>{children}</SidebarProvider>;
 }
