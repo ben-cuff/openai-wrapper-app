@@ -14,7 +14,7 @@ export default function ChatMessages({
 	textareaHeight: number;
 }) {
 	return (
-		<Card className="flex flex-col h-full overflow-hidden">
+		<Card className="flex flex-col h-[calc(100vh-10rem)] overflow-hidden">
 			<ScrollArea className="flex-1" ref={scrollAreaRef}>
 				<CardContent className="p-6">
 					<div className="flex flex-col gap-4">
