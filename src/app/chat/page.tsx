@@ -185,7 +185,7 @@ export default function ChatPage() {
 		<main className="container h-full flex flex-row gap-4 p-4 md:p-6">
 			<div className="h-full overflow-y-auto">
 				<Sidebar>
-					<SidebarHeader className="w-full text-xl mt-0">
+					<SidebarHeader className="w-full text-xl mt-12">
 						<span className="w-full flex">
 							Conversations
 							<SidebarTrigger className="ml-auto" />
