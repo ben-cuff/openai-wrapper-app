@@ -186,10 +186,28 @@ export default function ChatPage() {
 			<div className="h-full overflow-y-auto">
 				<Sidebar>
 					<SidebarHeader className="w-full text-xl mt-12">
-						<span className="w-full flex">
-							Conversations
-							<SidebarTrigger className="ml-auto" />
-						</span>
+						<div className="w-full flex flex-col gap-2">
+							<div className="flex items-center">
+								<span>Conversations</span>
+								<SidebarTrigger className="ml-auto" />
+							</div>
+							<Button
+								variant="secondary"
+								className="w-full"
+								onClick={() => {
+									setMessages([
+										{
+											id: "initial",
+											role: "assistant",
+											content: "Hello! How can I help you today?",
+										},
+									]);
+									setConversationId(crypto.randomUUID());
+								}}
+							>
+								New Chat
+							</Button>
+						</div>
 					</SidebarHeader>
 					<SidebarSeparator className="mb-2" />
 					<SidebarContent className="w-full">
@@ -250,24 +268,6 @@ export default function ChatPage() {
 							"Send"
 						)}
 					</Button>
-					{messages.length > 1 && (
-						<Button
-							variant="secondary"
-							onClick={() => {
-								setMessages([
-									{
-										id: "initial",
-										role: "assistant",
-										content:
-											"Hello! How can I help you today?",
-									},
-								]);
-								setConversationId(crypto.randomUUID());
-							}}
-						>
-							New Chat
-						</Button>
-					)}
 				</form>
 			</div>
 		</main>
