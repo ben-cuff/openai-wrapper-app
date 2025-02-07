@@ -7,7 +7,6 @@ import { ScrollArea } from "../ui/scroll-area";
 export default function ChatMessages({
 	messages,
 	scrollAreaRef,
-	textareaHeight,
 }: {
 	messages: Message[];
 	scrollAreaRef: RefObject<HTMLDivElement | null>;

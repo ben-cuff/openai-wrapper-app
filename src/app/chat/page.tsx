@@ -263,7 +263,7 @@ export default function ChatPage() {
 							if (e.key === "Enter" && !e.shiftKey) {
 								e.preventDefault();
 								if (input.trim() && !isLoading) {
-									handleSubmit(e as any);
+									handleSubmit(e);
 								}
 							}
 						}}
