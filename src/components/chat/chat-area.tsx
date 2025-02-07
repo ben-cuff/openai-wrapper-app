@@ -10,10 +10,11 @@ export default function ChatMessages({
 }: {
 	messages: Message[];
 	scrollAreaRef: RefObject<HTMLDivElement | null>;
+	textareaHeight: number;
 }) {
 	return (
-		<Card>
-			<ScrollArea className="h-[calc(100vh-10rem)]" ref={scrollAreaRef}>
+		<Card className="flex flex-col h-[calc(100vh-10rem)] overflow-hidden">
+			<ScrollArea className="flex-1" ref={scrollAreaRef}>
 				<CardContent className="p-6">
 					<div className="flex flex-col gap-4">
 						{messages.map((message) => (

@@ -5,7 +5,7 @@ import MenuContainer from "./menu-container";
 
 export default function NavBar() {
 	return (
-		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+		<header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
 			<div className="container flex h-14 items-center">
 				<Link
 					href="/"

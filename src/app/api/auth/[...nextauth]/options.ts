@@ -78,7 +78,7 @@ export const authOptions: NextAuthOptions = {
 async function getOpenaiApiKey(id: number) {
 	try {
 		const response = await fetch(
-			`http://localhost:3000/api/account/${id}/openai-key`,
+			`${process.env.base_url}/api/account/${id}/openai-key`,
 			{
 				method: "GET",
 				headers: {

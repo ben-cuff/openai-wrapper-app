@@ -4,7 +4,6 @@ import AIModelDropdown from "@/components/chat/ai-model-dropdown";
 import ChatMessages from "@/components/chat/chat-area";
 import ConversationItem from "@/components/chat/conversation-item";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
 	Sidebar,
 	SidebarContent,
@@ -13,6 +12,7 @@ import {
 	SidebarTrigger,
 	useSidebar,
 } from "@/components/ui/sidebar";
+import { Textarea } from "@/components/ui/textarea";
 import { Conversation } from "@/types/conversation";
 import { Message } from "@/types/message";
 import { Loader2 } from "lucide-react";
@@ -34,11 +34,12 @@ export default function ChatPage() {
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
-	const [AIModel, setAIModel] = useState("gpt-4o-mini");
+	const [AIModel, setAIModel] = useState("o1-preview");
 	const { data: session } = useSession();
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 	const [updateMessage, setUpdateMessage] = useState(false);
 	const sidebar = useSidebar();
+	const [textareaHeight, setTextareaHeight] = useState(40); // Default height
 
 	useEffect(() => {
 		const fetchConversations = async () => {
@@ -182,13 +183,32 @@ export default function ChatPage() {
 	};
 
 	return (
-		<main className="container flex h-auto flex-row gap-4 p-4 md:p-6 overflow-hidden">
-			<div className="h-auto overflow-y-auto">
+		<main className="container h-[calc(100vh-3.5rem)] flex flex-row gap-4 p-4 md:p-6">
+			<div className="overflow-hidden">
 				<Sidebar>
-					<SidebarHeader className="w-full mt-14 text-xl">
-						<span className="w-full flex">
-							Conversations
-							<SidebarTrigger className="ml-auto" />
+					<SidebarHeader className="w-full text-xl mt-12">
+						<span className="w-full flex flex-col gap-2">
+							<div className="flex">
+								Conversations
+								<SidebarTrigger className="ml-auto" />
+							</div>
+							<Button
+								variant="outline"
+								className="w-full"
+								onClick={() => {
+									setMessages([
+										{
+											id: "initial",
+											role: "assistant",
+											content:
+												"Hello! How can I help you today?",
+										},
+									]);
+									setConversationId(crypto.randomUUID());
+								}}
+							>
+								New Chat
+							</Button>
 						</span>
 					</SidebarHeader>
 					<SidebarSeparator className="mb-2" />
@@ -223,18 +243,30 @@ export default function ChatPage() {
 			<div className="flex-shrink-0">
 				{!sidebar.open && <SidebarTrigger />}
 			</div>
-			<div className="flex-1 h-auto">
-				<ChatMessages
-					messages={messages}
-					scrollAreaRef={scrollAreaRef}
-				/>
-				<form onSubmit={handleSubmit} className="flex gap-2">
-					<Input
+			<div className="flex-1 flex flex-col h-full">
+				<div className="flex-1">
+					<ChatMessages
+						messages={messages}
+						scrollAreaRef={scrollAreaRef}
+						textareaHeight={textareaHeight}
+					/>
+				</div>
+				<form onSubmit={handleSubmit} className="flex gap-2 mt-2">
+					<Textarea
 						placeholder="Type your message here..."
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
 						className="flex-1"
 						disabled={isLoading}
+						onHeightChange={(height) => setTextareaHeight(height)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" && !e.shiftKey) {
+								e.preventDefault();
+								if (input.trim() && !isLoading) {
+									handleSubmit(e);
+								}
+							}
+						}}
 					/>
 					<AIModelDropdown
 						AIModel={AIModel}
@@ -250,24 +282,6 @@ export default function ChatPage() {
 							"Send"
 						)}
 					</Button>
-					{messages.length > 1 && (
-						<Button
-							variant="secondary"
-							onClick={() => {
-								setMessages([
-									{
-										id: "initial",
-										role: "assistant",
-										content:
-											"Hello! How can I help you today?",
-									},
-								]);
-								setConversationId(crypto.randomUUID());
-							}}
-						>
-							New Chat
-						</Button>
-					)}
 				</form>
 			</div>
 		</main>

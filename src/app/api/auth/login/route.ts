@@ -11,9 +11,9 @@ export async function POST(req: Request) {
 
 		if (!user) {
 			return new Response(
-				JSON.stringify({ message: "Username or password incorrect" }),
+				JSON.stringify({ error: "Username or password incorrect" }),
 				{
-					status: 404,
+					status: 401,
 					headers: { "Content-Type": "application/json" },
 				}
 			);
@@ -31,9 +31,9 @@ export async function POST(req: Request) {
 			);
 		} else {
 			return new Response(
-				JSON.stringify({ message: "Username or password incorrect" }),
+				JSON.stringify({ error: "Username or password incorrect" }),
 				{
-					status: 404,
+					status: 401,
 					headers: { "Content-Type": "application/json" },
 				}
 			);
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 	} catch (error) {
 		console.error("Error during login:", error);
 		return new Response(
-			JSON.stringify({ message: "Internal Server Error" }),
+			JSON.stringify({ error: "Internal Server Error" }),
 			{
 				status: 500,
 				headers: { "Content-Type": "application/json" },

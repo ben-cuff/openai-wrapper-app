@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -45,12 +46,19 @@ export default function SignInPage() {
 		// if the registration fails, alert the user to the error
 		if (!response.ok) {
 			const errorData = await response.json();
-			alert(`Error: ${errorData.detail}`);
+			alert(`Error: ${errorData.error}`);
 			return;
 		}
 
-		// if all passes, send the user to the sign in page
-		router.push("/signin");
+		await response.json();
+
+		await signIn("credentials", {
+			username: username,
+			password: password,
+			redirect: false,
+		});
+
+		router.push("/");
 	};
 
 	return (
