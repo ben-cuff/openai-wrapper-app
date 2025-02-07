@@ -40,6 +40,7 @@ export default function ChatPage() {
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 	const [updateMessage, setUpdateMessage] = useState(false);
 	const sidebar = useSidebar();
+	const [textareaHeight, setTextareaHeight] = useState(40); // Default height
 
 	useEffect(() => {
 		const fetchConversations = async () => {
@@ -183,13 +184,31 @@ export default function ChatPage() {
 	};
 
 	return (
-		<main className="container h-full flex flex-row gap-4 p-4 md:p-6">
+		<main className="container h-[calc(100vh-3.5rem)] flex flex-row gap-4 p-4 md:p-6">
 			<div className="h-full overflow-y-auto">
 				<Sidebar>
-					<SidebarHeader className="w-full text-xl mt-1">
-						<span className="w-full flex">
-							Conversations
-							<SidebarTrigger className="ml-auto" />
+					<SidebarHeader className="w-full text-xl mt-12">
+						<span className="w-full flex flex-col gap-2">
+							<div className="flex">
+								Conversations
+								<SidebarTrigger className="ml-auto" />
+							</div>
+							<Button
+								variant="outline"
+								className="w-full"
+								onClick={() => {
+									setMessages([
+										{
+											id: "initial",
+											role: "assistant",
+											content: "Hello! How can I help you today?",
+										},
+									]);
+									setConversationId(crypto.randomUUID());
+								}}
+							>
+								New Chat
+							</Button>
 						</span>
 					</SidebarHeader>
 					<SidebarSeparator className="mb-2" />
@@ -224,11 +243,14 @@ export default function ChatPage() {
 			<div className="flex-shrink-0">
 				{!sidebar.open && <SidebarTrigger />}
 			</div>
-			<div className="flex-1 flex flex-col h-full overflow-hidden">
-				<ChatMessages
-					messages={messages}
-					scrollAreaRef={scrollAreaRef}
-				/>
+			<div className="flex-1 flex flex-col h-full">
+				<div className="flex-1">
+					<ChatMessages
+						messages={messages}
+						scrollAreaRef={scrollAreaRef}
+						textareaHeight={textareaHeight}
+					/>
+				</div>
 				<form onSubmit={handleSubmit} className="flex gap-2 mt-2">
 					<Textarea
 						placeholder="Type your message here..."
@@ -236,6 +258,7 @@ export default function ChatPage() {
 						onChange={(e) => setInput(e.target.value)}
 						className="flex-1"
 						disabled={isLoading}
+						onHeightChange={(height) => setTextareaHeight(height)}
 						onKeyDown={(e) => {
 							if (e.key === 'Enter' && !e.shiftKey) {
 								e.preventDefault();
@@ -259,24 +282,6 @@ export default function ChatPage() {
 							"Send"
 						)}
 					</Button>
-					{messages.length > 1 && (
-						<Button
-							variant="secondary"
-							onClick={() => {
-								setMessages([
-									{
-										id: "initial",
-										role: "assistant",
-										content:
-											"Hello! How can I help you today?",
-									},
-								]);
-								setConversationId(crypto.randomUUID());
-							}}
-						>
-							New Chat
-						</Button>
-					)}
 				</form>
 			</div>
 		</main>

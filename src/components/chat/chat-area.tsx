@@ -7,12 +7,14 @@ import { ScrollArea } from "../ui/scroll-area";
 export default function ChatMessages({
 	messages,
 	scrollAreaRef,
+	textareaHeight,
 }: {
 	messages: Message[];
 	scrollAreaRef: RefObject<HTMLDivElement | null>;
+	textareaHeight: number;
 }) {
 	return (
-		<Card className="flex flex-col h-[calc(100vh-8rem)]">
+		<Card className="flex flex-col h-full overflow-hidden">
 			<ScrollArea className="flex-1" ref={scrollAreaRef}>
 				<CardContent className="p-6">
 					<div className="flex flex-col gap-4">

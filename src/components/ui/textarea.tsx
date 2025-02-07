@@ -4,8 +4,10 @@ import { cn } from "@/lib/utils";
 
 const Textarea = React.forwardRef<
 	HTMLTextAreaElement,
-	React.ComponentPropsWithoutRef<typeof TextareaAutosize>
->(({ className, ...props }, ref) => {
+	React.ComponentPropsWithoutRef<typeof TextareaAutosize> & {
+		onHeightChange?: (height: number) => void;
+	}
+>(({ className, onHeightChange, ...props }, ref) => {
 	return (
 		<TextareaAutosize
 			className={cn(
@@ -15,6 +17,7 @@ const Textarea = React.forwardRef<
 			ref={ref as any}
 			minRows={1}
 			maxRows={3}
+			onHeightChange={(height) => onHeightChange?.(height)}
 			{...props}
 		/>
 	);
