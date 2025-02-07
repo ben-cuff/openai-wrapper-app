@@ -4,7 +4,6 @@ import AIModelDropdown from "@/components/chat/ai-model-dropdown";
 import ChatMessages from "@/components/chat/chat-area";
 import ConversationItem from "@/components/chat/conversation-item";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
 	Sidebar,
 	SidebarContent,
@@ -13,13 +12,13 @@ import {
 	SidebarTrigger,
 	useSidebar,
 } from "@/components/ui/sidebar";
+import { Textarea } from "@/components/ui/textarea";
 import { Conversation } from "@/types/conversation";
 import { Message } from "@/types/message";
 import { Loader2 } from "lucide-react";
 import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([
@@ -30,7 +29,7 @@ export default function ChatPage() {
 		},
 	]);
 	const [conversationId, setConversationId] = useState<string>(
-		crypto.randomUUID(),
+		crypto.randomUUID()
 	);
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +45,7 @@ export default function ChatPage() {
 		const fetchConversations = async () => {
 			if (session?.user?.id) {
 				const response = await fetch(
-					`/api/account/${session.user.id}/message`,
+					`/api/account/${session.user.id}/message`
 				);
 				if (response.ok) {
 					const data = await response.json();
@@ -61,7 +60,7 @@ export default function ChatPage() {
 	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
 			const scrollContainer = scrollAreaRef.current.querySelector(
-				"[data-radix-scroll-area-viewport]",
+				"[data-radix-scroll-area-viewport]"
 			);
 			if (scrollContainer) {
 				scrollContainer.scrollTop = scrollContainer.scrollHeight;
@@ -109,7 +108,7 @@ export default function ChatPage() {
 						({ role, content }) => ({
 							role,
 							content,
-						}),
+						})
 					),
 					model: AIModel,
 					openai_api_key: session?.user?.openai_api_key,
@@ -121,7 +120,7 @@ export default function ChatPage() {
 				const errorData = await response.json();
 				alert(errorData.error || "Failed to fetch response");
 				throw new Error(
-					errorData.message || "Failed to fetch response",
+					errorData.message || "Failed to fetch response"
 				);
 			}
 
@@ -145,8 +144,8 @@ export default function ChatPage() {
 					prev.map((message) =>
 						message.id === tempMessageId
 							? { ...message, content }
-							: message,
-					),
+							: message
+					)
 				);
 			}
 
@@ -185,7 +184,7 @@ export default function ChatPage() {
 
 	return (
 		<main className="container h-[calc(100vh-3.5rem)] flex flex-row gap-4 p-4 md:p-6">
-			<div className="h-full overflow-y-auto">
+			<div className="overflow-hidden">
 				<Sidebar>
 					<SidebarHeader className="w-full text-xl mt-12">
 						<span className="w-full flex flex-col gap-2">
@@ -201,7 +200,8 @@ export default function ChatPage() {
 										{
 											id: "initial",
 											role: "assistant",
-											content: "Hello! How can I help you today?",
+											content:
+												"Hello! How can I help you today?",
 										},
 									]);
 									setConversationId(crypto.randomUUID());
@@ -218,7 +218,7 @@ export default function ChatPage() {
 								.sort(
 									(a, b) =>
 										new Date(b.updatedAt).getTime() -
-										new Date(a.updatedAt).getTime(),
+										new Date(a.updatedAt).getTime()
 								)
 								.map((conversation) => (
 									<ConversationItem
@@ -260,7 +260,7 @@ export default function ChatPage() {
 						disabled={isLoading}
 						onHeightChange={(height) => setTextareaHeight(height)}
 						onKeyDown={(e) => {
-							if (e.key === 'Enter' && !e.shiftKey) {
+							if (e.key === "Enter" && !e.shiftKey) {
 								e.preventDefault();
 								if (input.trim() && !isLoading) {
 									handleSubmit(e as any);
