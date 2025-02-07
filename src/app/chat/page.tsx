@@ -19,6 +19,7 @@ import { Loader2 } from "lucide-react";
 import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([
@@ -185,29 +186,11 @@ export default function ChatPage() {
 		<main className="container h-full flex flex-row gap-4 p-4 md:p-6">
 			<div className="h-full overflow-y-auto">
 				<Sidebar>
-					<SidebarHeader className="w-full text-xl mt-12">
-						<div className="w-full flex flex-col gap-2">
-							<div className="flex items-center">
-								<span>Conversations</span>
-								<SidebarTrigger className="ml-auto" />
-							</div>
-							<Button
-								variant="secondary"
-								className="w-full"
-								onClick={() => {
-									setMessages([
-										{
-											id: "initial",
-											role: "assistant",
-											content: "Hello! How can I help you today?",
-										},
-									]);
-									setConversationId(crypto.randomUUID());
-								}}
-							>
-								New Chat
-							</Button>
-						</div>
+					<SidebarHeader className="w-full text-xl mt-1">
+						<span className="w-full flex">
+							Conversations
+							<SidebarTrigger className="ml-auto" />
+						</span>
 					</SidebarHeader>
 					<SidebarSeparator className="mb-2" />
 					<SidebarContent className="w-full">
@@ -247,12 +230,20 @@ export default function ChatPage() {
 					scrollAreaRef={scrollAreaRef}
 				/>
 				<form onSubmit={handleSubmit} className="flex gap-2 mt-2">
-					<Input
+					<Textarea
 						placeholder="Type your message here..."
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
 						className="flex-1"
 						disabled={isLoading}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter' && !e.shiftKey) {
+								e.preventDefault();
+								if (input.trim() && !isLoading) {
+									handleSubmit(e as any);
+								}
+							}
+						}}
 					/>
 					<AIModelDropdown
 						AIModel={AIModel}
@@ -268,6 +259,24 @@ export default function ChatPage() {
 							"Send"
 						)}
 					</Button>
+					{messages.length > 1 && (
+						<Button
+							variant="secondary"
+							onClick={() => {
+								setMessages([
+									{
+										id: "initial",
+										role: "assistant",
+										content:
+											"Hello! How can I help you today?",
+									},
+								]);
+								setConversationId(crypto.randomUUID());
+							}}
+						>
+							New Chat
+						</Button>
+					)}
 				</form>
 			</div>
 		</main>
