@@ -12,7 +12,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<body className="min-h-screen bg-background font-sans antialiased">
+			<body className="min-h-screen bg-background font-sans antialiased overflow-hidden">
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"
@@ -20,12 +20,10 @@ export default function RootLayout({
 					disableTransitionOnChange
 				>
 					<SessionProvider>
-						<div className="relative flex min-h-screen flex-col">
-							<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-								<NavBar />
-							</header>
-							<main className="flex-1">{children}</main>
-						</div>
+						<NavBar />
+						<main className="h-[calc(100vh-3.5rem)] mt-14">
+							{children}
+						</main>
 					</SessionProvider>
 				</ThemeProvider>
 			</body>

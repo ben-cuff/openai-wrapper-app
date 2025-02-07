@@ -12,8 +12,8 @@ export default function ChatMessages({
 	scrollAreaRef: RefObject<HTMLDivElement | null>;
 }) {
 	return (
-		<Card>
-			<ScrollArea className="h-[calc(100vh-10rem)]" ref={scrollAreaRef}>
+		<Card className="flex flex-col h-[calc(100vh-8rem)]">
+			<ScrollArea className="flex-1" ref={scrollAreaRef}>
 				<CardContent className="p-6">
 					<div className="flex flex-col gap-4">
 						{messages.map((message) => (
