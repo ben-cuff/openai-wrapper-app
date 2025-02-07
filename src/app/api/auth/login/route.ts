@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 			return new Response(
 				JSON.stringify({ error: "Username or password incorrect" }),
 				{
-					status: 404,
+					status: 401,
 					headers: { "Content-Type": "application/json" },
 				}
 			);
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 			return new Response(
 				JSON.stringify({ error: "Username or password incorrect" }),
 				{
-					status: 404,
+					status: 401,
 					headers: { "Content-Type": "application/json" },
 				}
 			);
