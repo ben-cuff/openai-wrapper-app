@@ -102,7 +102,7 @@ export default function SettingsPage() {
 			window.location.href = "/";
 		}
 	};
-	
+
 	const [old_password, setOldPassword] = useState("");
 	const [new_password, setNewPassword] = useState("");
 
@@ -225,9 +225,9 @@ export default function SettingsPage() {
 						className="space-y-4"
 					>
 						<div className="space-y-2">
-							<Label htmlFor="oldPassword">Old Password</Label>
+							<Label htmlFor="old_password">Old Password</Label>
 							<Input
-								id="oldPassword"
+								id="old_password"
 								type="password"
 								value={old_password}
 								onChange={(e) => setOldPassword(e.target.value)}
@@ -235,9 +235,9 @@ export default function SettingsPage() {
 							/>
 						</div>
 						<div className="space-y-2">
-							<Label htmlFor="newPassword">New Password</Label>
+							<Label htmlFor="new_password">New Password</Label>
 							<Input
-								id="newPassword"
+								id="new_password"
 								type="password"
 								value={new_password}
 								onChange={(e) => setNewPassword(e.target.value)}
