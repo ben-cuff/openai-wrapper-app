@@ -51,7 +51,11 @@ export default function SettingsPage() {
 
 	const handleSubmitDeleteHistory = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!confirm("Are you sure you want to delete all message history?")) {
+		if (
+			!confirm(
+				"Are you sure you want to delete all message history? This action is irreversible."
+			)
+		) {
 			return;
 		}
 		setIsLoading(true);
@@ -63,13 +67,74 @@ export default function SettingsPage() {
 				}
 			);
 			if (!response.ok) {
-				throw new Error(
-					"Failed to delete message history. This action is irreversible."
-				);
+				throw new Error("Failed to delete message history.");
 			}
 		} catch (error) {
 			console.error("Error deleting message history:", error);
 			alert("Failed to delete message history");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const handleSubmitDeleteAccount = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (
+			!confirm(
+				"Are you sure you want to delete your account? This action is irreversible"
+			)
+		) {
+			return;
+		}
+		setIsLoading(true);
+		try {
+			const response = await fetch(`/api/account/${session?.user?.id}`, {
+				method: "DELETE",
+			});
+			if (!response.ok) {
+				throw new Error("Failed to delete account.");
+			}
+		} catch (error) {
+			console.error("Error deleting account", error);
+			alert("Failed to delete account");
+		} finally {
+			setIsLoading(false);
+			window.location.href = "/";
+		}
+	};
+
+	{
+		/* Place this new code inside your component, above the return statement */
+	}
+	const [old_password, setOldPassword] = useState("");
+	const [new_password, setNewPassword] = useState("");
+
+	const handleSubmitChangePassword = async (e: React.FormEvent) => {
+		e.preventDefault();
+		setIsLoading(true);
+		try {
+			if (new_password.length < 8) {
+				alert("New password must be at least 8 characters long");
+				return;
+			}
+
+			const response = await fetch(
+				`/api/account/${session?.user?.id}/password`,
+				{
+					method: "PATCH",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ old_password, new_password }),
+				}
+			);
+			if (!response.ok) {
+				throw new Error("Failed to change password");
+			}
+			alert("Password changed successfully!");
+			setOldPassword("");
+			setNewPassword("");
+		} catch (error) {
+			console.error("Error changing password:", error);
+			alert("Failed to change password");
 		} finally {
 			setIsLoading(false);
 		}
@@ -140,6 +205,50 @@ export default function SettingsPage() {
 							{isLoading
 								? "Deleting..."
 								: "Delete All Message History"}
+						</Button>
+					</form>
+				</CardContent>
+				<CardContent>
+					<form
+						onSubmit={handleSubmitDeleteAccount}
+						className="space-y-4"
+					>
+						<Button
+							type="submit"
+							variant="destructive"
+							disabled={isLoading}
+						>
+							{isLoading ? "Deleting..." : "Delete Account"}
+						</Button>
+					</form>
+				</CardContent>
+				<CardContent>
+					<form
+						onSubmit={handleSubmitChangePassword}
+						className="space-y-4"
+					>
+						<div className="space-y-2">
+							<Label htmlFor="oldPassword">Old Password</Label>
+							<Input
+								id="oldPassword"
+								type="password"
+								value={old_password}
+								onChange={(e) => setOldPassword(e.target.value)}
+								required
+							/>
+						</div>
+						<div className="space-y-2">
+							<Label htmlFor="newPassword">New Password</Label>
+							<Input
+								id="newPassword"
+								type="password"
+								value={new_password}
+								onChange={(e) => setNewPassword(e.target.value)}
+								required
+							/>
+						</div>
+						<Button type="submit" disabled={isLoading}>
+							{isLoading ? "Updating..." : "Change Password"}
 						</Button>
 					</form>
 				</CardContent>
