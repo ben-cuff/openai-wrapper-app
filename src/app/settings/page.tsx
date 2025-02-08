@@ -102,10 +102,7 @@ export default function SettingsPage() {
 			window.location.href = "/";
 		}
 	};
-
-	{
-		/* Place this new code inside your component, above the return statement */
-	}
+	
 	const [old_password, setOldPassword] = useState("");
 	const [new_password, setNewPassword] = useState("");
 
