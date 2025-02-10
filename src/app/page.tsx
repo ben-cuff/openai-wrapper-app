@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
 import {
 	Card,
-	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Link from "next/link";
 
 export default function Home() {
 	return (
@@ -18,19 +17,22 @@ export default function Home() {
 					<h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
 						Welcome to{" "}
 						<span className="text-primary">
-							Your Amazing Platform
+							Not a ChatGPT Clone
 						</span>
 					</h1>
 					<p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-						Transform your workflow with our powerful tools and
-						intuitive interface. Built for developers, designed for
-						everyone.
+						Interact with one of OpenAis LLM models using your own
+						API Key
 					</p>
 					<div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-						<Button size="lg">Get Started</Button>
-						<Button variant="outline" size="lg">
-							Learn More
-						</Button>
+						<Link href="/register">
+							<Button size="lg">Get Started</Button>
+						</Link>
+						<Link href={"/guide"}>
+							<Button variant="outline" size="lg">
+								Learn More
+							</Button>
+						</Link>
 					</div>
 				</section>
 
@@ -55,64 +57,21 @@ export default function Home() {
 					</div>
 				</section>
 
-				{/* Testimonials Section */}
-				<section className="px-4 py-16">
-					<div className="mx-auto max-w-6xl">
-						<h2 className="mb-12 text-center text-3xl font-bold">
-							What Our Users Say
-						</h2>
-						<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-							{testimonials.map((testimonial, index) => (
-								<Card key={index}>
-									<CardContent className="pt-6">
-										<div className="flex items-center gap-4">
-											<Avatar>
-												<AvatarImage
-													src={testimonial.avatar}
-													alt={testimonial.name}
-												/>
-												<AvatarFallback>
-													{testimonial.name
-														.split(" ")
-														.map((n) => n[0])
-														.join("")}
-												</AvatarFallback>
-											</Avatar>
-											<div>
-												<p className="font-semibold">
-													{testimonial.name}
-												</p>
-												<p className="text-sm text-muted-foreground">
-													{testimonial.title}
-												</p>
-											</div>
-										</div>
-										<p className="mt-4 text-muted-foreground">
-											&quot;{testimonial.quote}&quot;
-										</p>
-									</CardContent>
-								</Card>
-							))}
-						</div>
-					</div>
-				</section>
-
 				{/* CTA Section */}
 				<section className="bg-primary px-4 py-16 text-primary-foreground">
 					<div className="mx-auto max-w-6xl text-center">
 						<h2 className="mb-4 text-3xl font-bold">
 							Ready to Get Started?
 						</h2>
-						<p className="mb-8 text-lg">
-							Join thousands of satisfied users today.
-						</p>
-						<Button
-							variant="secondary"
-							size="lg"
-							className="font-semibold"
-						>
-							Sign Up Now
-						</Button>
+						<Link href={"/register"}>
+							<Button
+								variant="secondary"
+								size="lg"
+								className="font-semibold"
+							>
+								Sign Up Now
+							</Button>
+						</Link>
 					</div>
 				</section>
 			</main>
@@ -127,48 +86,13 @@ const features = [
 			"Built with performance in mind, ensuring your experience is smooth and efficient.",
 	},
 	{
-		title: "Highly Secure",
+		title: "Pay Per Use",
 		description:
-			"Enterprise-grade security features to keep your data safe and protected.",
-	},
-	{
-		title: "Easy Integration",
-		description:
-			"Seamlessly integrate with your existing tools and workflows.",
-	},
-	{
-		title: "Real-time Updates",
-		description:
-			"Stay in sync with instant updates and live collaboration.",
-	},
-	{
-		title: "24/7 Support",
-		description: "Our dedicated team is always here to help you succeed.",
+			"Since you are using your own api key, you only pay for what you use.",
 	},
 	{
 		title: "Customizable",
 		description:
-			"Tailor the platform to your needs with powerful customization options.",
-	},
-];
-
-const testimonials = [
-	{
-		name: "Sarah Johnson",
-		title: "Lead Developer",
-		quote: "This platform has completely transformed how our team works. The efficiency gains are remarkable.",
-		avatar: "https://i.pravatar.cc/150?u=sarah",
-	},
-	{
-		name: "Michael Chen",
-		title: "Product Manager",
-		quote: "The intuitive interface and powerful features make this a must-have tool for any serious team.",
-		avatar: "https://i.pravatar.cc/150?u=michael",
-	},
-	{
-		name: "Emma Davis",
-		title: "CTO",
-		quote: "We've seen a 40% increase in productivity since implementing this solution. Highly recommended!",
-		avatar: "https://i.pravatar.cc/150?u=emma",
+			"Tailor the platform to your needs by selecting the model you want",
 	},
 ];

@@ -25,6 +25,14 @@ export default function MenuContainer() {
 						Images
 					</NavigationMenuLink>
 				</NavigationMenuItem>
+				<NavigationMenuItem>
+					<NavigationMenuLink
+						href="/guide"
+						className="px-4 py-2 text-sm font-medium text-gray-200 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+					>
+						Guide
+					</NavigationMenuLink>
+				</NavigationMenuItem>
 			</NavigationMenuList>
 		</NavigationMenu>
 	);
