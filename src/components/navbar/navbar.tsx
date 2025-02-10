@@ -9,9 +9,12 @@ export default function NavBar() {
 			<div className="container flex h-14 items-center">
 				<Link
 					href="/"
-					className="mr-4 font-bold text-xl ml-2 hover:text-primary transition-colors"
+					className="group mr-4 font-bold text-xl ml-2 transition-colors hover:text-primary"
 				>
-					Not A ChatGPT Clone
+					Not A{" "}
+					<span className="text-primary transition-colors group-hover:text-secondary-foreground">
+						ChatGPT Clone
+					</span>
 				</Link>
 				<div className="flex items-center">
 					<MenuContainer></MenuContainer>
