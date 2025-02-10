@@ -43,8 +43,8 @@ export default function GuidePage() {
 								dashboard.
 							</li>
 							<li>
-								Click on the "Create new secret key" button to
-								generate a new API key.
+								Click on the &quot;Create new secret key&quot;
+								button to generate a new API key.
 							</li>
 							<li>
 								Copy the API key and store it in a secure
