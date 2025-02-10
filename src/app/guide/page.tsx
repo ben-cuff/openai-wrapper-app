@@ -14,7 +14,7 @@ export default function GuidePage() {
 				<Card className="w-full max-w-2xl">
 					<CardHeader className="space-y-2 text-center">
 						<CardTitle className="text-4xl font-bold">
-							Guide: How to Get an OpenAI Key
+							How to Get an OpenAI Key
 						</CardTitle>
 						<CardDescription className="text-lg text-muted-foreground">
 							Follow these steps to obtain your OpenAI API key:

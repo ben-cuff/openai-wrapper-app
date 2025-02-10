@@ -68,7 +68,7 @@ export async function POST(req: Request) {
 		if (!openai_api_key) {
 			return new Response(
 				JSON.stringify({
-					error: "OpenAI API key is required, please add this to your account",
+					error: "OpenAI API key is required, please add this to your account. Use the guide page if needed.",
 				}),
 				{
 					status: 400,
