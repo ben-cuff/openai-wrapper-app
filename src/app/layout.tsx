@@ -2,6 +2,8 @@
 
 import NavBar from "@/components/navbar/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 
@@ -13,6 +15,8 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className="min-h-screen bg-background font-sans antialiased overflow-hidden">
+				<SpeedInsights />
+				<Analytics />
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"
