@@ -59,7 +59,7 @@ export default function ConversationItem({
 					<Button
 						variant="ghost"
 						size="sm"
-						className="px-1.5 text-red-600 dark:text-red-400 cursor-pointer shrink-0 mb-[2px]"
+						className="px-1.5 text-red-600 dark:text-red-400 cursor-pointer shrink-0 mb-[2px] hover:bg-transparent"
 						onClick={async (e) => {
 							e.stopPropagation();
 							await deleteConversation(
