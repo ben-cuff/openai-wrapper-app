@@ -1,5 +1,3 @@
-"use client";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
 	DropdownMenu,
@@ -36,7 +34,10 @@ export default function AvatarContainer() {
 				<button>
 					<Avatar className="mr-2">
 						<AvatarImage
-							src={session.user?.image ?? "https://github.com/shadcn.png"}
+							src={
+								session.user?.image ??
+								"https://github.com/shadcn.png"
+							}
 						/>
 						<AvatarFallback>
 							{session.user?.name?.[0]?.toUpperCase() ?? "U"}
