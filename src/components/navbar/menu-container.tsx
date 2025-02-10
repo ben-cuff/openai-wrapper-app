@@ -12,7 +12,7 @@ export default function MenuContainer() {
 				<NavigationMenuItem>
 					<NavigationMenuLink
 						href="/chat"
-						className="px-4 py-2 text-sm font-medium text-gray-200 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+						className="px-4 py-2 text-sm font-medium rounded-md transition-colors hover:bg-gray-200 hover:text-blue-600 dark:hover:bg-gray-700 dark:hover:text-blue-400"
 					>
 						Chat
 					</NavigationMenuLink>
@@ -20,7 +20,7 @@ export default function MenuContainer() {
 				<NavigationMenuItem>
 					<NavigationMenuLink
 						href="/image"
-						className="px-4 py-2 text-sm font-medium text-gray-200 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+						className="px-4 py-2 text-sm font-medium rounded-md transition-colors hover:bg-gray-200 hover:text-blue-600 dark:hover:bg-gray-700 dark:hover:text-blue-400"
 					>
 						Images
 					</NavigationMenuLink>
@@ -28,7 +28,7 @@ export default function MenuContainer() {
 				<NavigationMenuItem>
 					<NavigationMenuLink
 						href="/guide"
-						className="px-4 py-2 text-sm font-medium text-gray-200 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+						className="px-4 py-2 text-sm font-medium rounded-md transition-colors hover:bg-gray-200 hover:text-blue-600 dark:hover:bg-gray-700 dark:hover:text-blue-400"
 					>
 						Guide
 					</NavigationMenuLink>
