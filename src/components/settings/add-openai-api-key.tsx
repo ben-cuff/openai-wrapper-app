@@ -68,9 +68,11 @@ export default function AddOpenAiKey({
 						required
 					/>
 				</div>
-				<Button type="submit" disabled={isLoading}>
-					{isLoading ? "Saving..." : "Save Changes"}
-				</Button>
+				<div className="flex justify-center">
+					<Button type="submit" disabled={isLoading}>
+						{isLoading ? "Saving..." : "Save Changes"}
+					</Button>
+				</div>
 			</form>
 		</CardContent>
 	);

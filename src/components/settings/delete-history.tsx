@@ -38,7 +38,7 @@ export default function DeleteHistory({ id }: { id: number }) {
 					variant="destructive"
 					disabled={isLoading}
 				>
-					{isLoading ? "Deleting..." : "Delete All Message History"}
+					{isLoading ? "Deleting..." : "Delete Message History"}
 				</Button>
 			</form>
 		</CardContent>

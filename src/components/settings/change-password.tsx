@@ -60,9 +60,11 @@ export default function ChangePassword({ id }: { id: number }) {
 						required
 					/>
 				</div>
-				<Button type="submit" disabled={isLoading}>
-					{isLoading ? "Updating..." : "Change Password"}
-				</Button>
+				<div className="flex justify-center">
+					<Button type="submit" disabled={isLoading}>
+						{isLoading ? "Updating..." : "Change Password"}
+					</Button>
+				</div>
 			</form>
 		</CardContent>
 	);

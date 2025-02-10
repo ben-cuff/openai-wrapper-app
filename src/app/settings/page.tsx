@@ -29,8 +29,10 @@ export default function SettingsPage() {
 						>
 					}
 				/>
-				<DeleteAccount id={session?.user.id as number} />
-				<DeleteHistory id={session?.user.id as number} />
+				<div className="flex justify-center">
+					<DeleteAccount id={session?.user.id as number} />
+					<DeleteHistory id={session?.user.id as number} />
+				</div>
 				<ChangePassword id={session?.user.id as number} />
 			</Card>
 		</main>
