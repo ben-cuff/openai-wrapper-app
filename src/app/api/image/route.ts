@@ -3,7 +3,7 @@ import OpenAI from "openai";
 
 export async function POST(req: Request) {
 	try {
-		const { openai_api_key, model, url, prompt, height, width } =
+		const { openai_api_key, model, url, prompt, height, width, mock } =
 			await req.json();
 
 		const size = determineImageSize(height, width);
@@ -46,13 +46,15 @@ export async function POST(req: Request) {
 			baseURL: url,
 		});
 
-		// const image = await openai.images.generate({
-		// 	size: size as ImageSize,
-		// 	prompt: prompt,
-		// 	model: model,
-		// });
+		if (!mock) {
+			const image = await openai.images.generate({
+				size: size as ImageSize,
+				prompt: prompt,
+				model: model,
+			});
 
-		// return new Response(JSON.stringify(image), { status: 201 });
+			return new Response(JSON.stringify(image), { status: 201 });
+		}
 		const mockResponse = {
 			created: 1739306820,
 			data: [

@@ -44,6 +44,7 @@ export default function ImagePage() {
 					model: AIModel,
 					openai_api_key: session?.user?.openai_api_key,
 					url: "https://api.openai.com/v1",
+					mock: false,
 				}),
 			});
 
