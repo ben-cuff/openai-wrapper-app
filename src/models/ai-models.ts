@@ -7,3 +7,8 @@ export const aiModels = [
 	{ id: "gpt-4o-mini", label: "GPT-4o-mini" },
 	{ id: "o1-preview", label: "o1-preview" },
 ];
+
+export const aiImageModels = [
+	{ id: "dall-e-2", label: "Dalle 2" },
+	{ id: "dall-e-3", label: "Dalle 3" },
+];
