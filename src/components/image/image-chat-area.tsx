@@ -1,6 +1,7 @@
 import LoadingImage from "@/app/image/loading";
 import { image } from "@/app/image/page";
 import Image from "next/image";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Card, CardContent } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
 
@@ -25,8 +26,19 @@ export default function ImageChatContent({
 				<CardContent className="p-6">
 					<div className="flex flex-col gap-4">
 						{prompts.map((prompt, index) => (
-							<div key={index} className="space-y-2">
-								<div className="p-2 rounded">{prompt}</div>
+							<div key={index} className="flex flex-col gap-4">
+								<div className="flex gap-4">
+									<Avatar>
+										<AvatarFallback>ME</AvatarFallback>
+									</Avatar>
+									<div
+										className={
+											"rounded-lg px-4 py-2 max-w-[80%] bg-primary text-primary-foreground"
+										}
+									>
+										{prompt}
+									</div>
+								</div>
 								<div className="flex justify-center">
 									<div
 										className={`rounded-lg px-4 py-2 max-w-[80%]`}
