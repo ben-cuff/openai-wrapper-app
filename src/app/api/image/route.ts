@@ -1,4 +1,4 @@
-import { determineImageSize } from "@/util/image-sizing";
+import { determineImageSize, ImageSize } from "@/util/image-sizing";
 import OpenAI from "openai";
 
 export async function POST(req: Request) {
