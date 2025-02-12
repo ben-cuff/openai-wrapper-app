@@ -1,18 +1,15 @@
 "use client";
 
+import ImageChatContent from "@/components/image/image-chat-area";
 import ImageResolutionDropdown from "@/components/image/image-resolution";
 import AIImageModelDropdown from "@/components/image/model-selection";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
-import LoadingImage from "./loading";
 
-interface image {
+export interface image {
 	url: string;
 }
 
@@ -22,7 +19,9 @@ export default function ImagePage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const { data: session } = useSession();
 	const [images, setImages] = useState<image[]>([]);
-	const scrollAreaRef = useRef<HTMLDivElement>(null);
+	const scrollAreaRef = useRef<HTMLDivElement>(
+		null
+	) as React.RefObject<HTMLDivElement>;
 	const [height, setHeight] = useState(1024);
 	const [width, setWidth] = useState(1024);
 	const [AIModel, setAIModel] = useState("dall-e-2");
@@ -32,7 +31,6 @@ export default function ImagePage() {
 		scrollToBottom();
 
 		setIsLoading(true);
-		// Update prompts first
 		setPrompts((currentPrompts) => [...currentPrompts, promptText.trim()]);
 
 		try {
@@ -82,41 +80,14 @@ export default function ImagePage() {
 
 	return (
 		<main className="container h-[calc(100vh-3.5rem)] flex flex-col gap-4 p-4 md:p-6">
-			<Card className="flex-1 flex flex-col overflow-hidden">
-				<ScrollArea className="flex-1" ref={scrollAreaRef}>
-					<CardContent className="p-6">
-						<div className="flex flex-col gap-4">
-							{prompts.map((prompt, index) => (
-								<div key={index} className="space-y-2">
-									<div className="p-2 rounded">{prompt}</div>
-									<div className="flex justify-center">
-										<div
-											className={`rounded-lg px-4 py-2 max-w-[80%]`}
-										>
-											{index === prompts.length - 1 &&
-											isLoading ? (
-												<LoadingImage
-													height={height}
-													width={width}
-												/>
-											) : (
-												images[index] && (
-													<Image
-														src={images[index].url}
-														alt={`Generated image for: ${prompt}`}
-														width={height}
-														height={width}
-													/>
-												)
-											)}
-										</div>
-									</div>
-								</div>
-							))}
-						</div>
-					</CardContent>
-				</ScrollArea>
-			</Card>
+			<ImageChatContent
+				prompts={prompts}
+				images={images}
+				isLoading={isLoading}
+				height={height}
+				width={width}
+				scrollAreaRef={scrollAreaRef}
+			/>
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();
