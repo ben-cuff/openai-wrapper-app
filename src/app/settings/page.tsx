@@ -16,25 +16,27 @@ export default function SettingsPage() {
 	const hasApiKey = Boolean(session?.user?.openai_api_key);
 
 	return (
-		<main className="container max-w-2xl py-8">
-			<Card>
-				<ApiKeyStatus hasApiKey={hasApiKey} />
-				<AddOpenAiKey
-					id={session?.user.id as number}
-					openai_api_key={session?.user.openai_api_key as string}
-					apiKey={apiKey as string}
-					setApiKey={
-						setApiKey as React.Dispatch<
-							React.SetStateAction<string>
-						>
-					}
-				/>
-				<div className="flex justify-center">
-					<DeleteAccount id={session?.user.id as number} />
-					<DeleteHistory id={session?.user.id as number} />
-				</div>
-				<ChangePassword id={session?.user.id as number} />
-			</Card>
+		<main className="h-[calc(100vh-3.5rem)] flex items-center justify-center">
+			<div className="max-w-2xl w-full px-4">
+				<Card>
+					<ApiKeyStatus hasApiKey={hasApiKey} />
+					<AddOpenAiKey
+						id={session?.user.id as number}
+						openai_api_key={session?.user.openai_api_key as string}
+						apiKey={apiKey as string}
+						setApiKey={
+							setApiKey as React.Dispatch<
+								React.SetStateAction<string>
+							>
+						}
+					/>
+					<div className="flex justify-center">
+						<DeleteAccount id={session?.user.id as number} />
+						<DeleteHistory id={session?.user.id as number} />
+					</div>
+					<ChangePassword id={session?.user.id as number} />
+				</Card>
+			</div>
 		</main>
 	);
 }
