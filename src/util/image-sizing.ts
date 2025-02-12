@@ -7,7 +7,7 @@ export const determineImageSize = (height?: number, width?: number): string => {
 		"1024x1792",
 	] as const;
 	const defaultSize = "1024x1024";
-	const requestedSize = `${height || 256}x${width || 256}`;
+	const requestedSize = `${height}x${width}`;
 	return validSizes.includes(requestedSize as (typeof validSizes)[number])
 		? requestedSize
 		: defaultSize;
