@@ -7,6 +7,7 @@ declare module "next-auth" {
 			id?: number;
 			username?: string | null;
 			openai_api_key?: string | null;
+			deepseek_api_key?: string | null;
 			name?: string | null;
 			image?: string | null;
 		};
@@ -15,6 +16,7 @@ declare module "next-auth" {
 		id: number;
 		username: string;
 		openai_api_key: string;
+		deepseek_api_key: string;
 		name?: string | null;
 		image?: string | null;
 	}
@@ -56,6 +58,7 @@ export const authOptions: NextAuthOptions = {
 				token.id = user.id;
 				token.username = user.username;
 				token.openai_api_key = user.openai_api_key;
+				token.deepseek_api_key = user.deepseek_api_key;
 			}
 			return token;
 		},
@@ -63,9 +66,14 @@ export const authOptions: NextAuthOptions = {
 			if (session.user) {
 				session.user.id = token.id as number;
 				session.user.username = token.username as string;
-				session.user.openai_api_key = await getOpenaiApiKey(
-					session.user.id
-				);
+
+				const [openai_api_key, deepseek_api_key] = await Promise.all([
+					getOpenaiApiKey(session.user.id),
+					getDeepSeekApiKey(session.user.id),
+				]);
+
+				session.user.openai_api_key = openai_api_key;
+				session.user.deepseek_api_key = deepseek_api_key;
 			}
 			return session;
 		},
@@ -90,6 +98,27 @@ async function getOpenaiApiKey(id: number) {
 
 		const res = await response.json();
 		return res.openai_api_key;
+	} catch (error) {
+		console.error(error);
+		return null;
+	}
+}
+
+async function getDeepSeekApiKey(id: number) {
+	try {
+		const response = await fetch(
+			`${process.env.base_url}/api/account/${id}/deepseek-key`,
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					"x-api-key": `${process.env.X_API_KEY}`,
+				},
+			}
+		);
+
+		const res = await response.json();
+		return res.deepseek_api_key;
 	} catch (error) {
 		console.error(error);
 		return null;
