@@ -22,7 +22,7 @@ export default function AddDeepSeekKey({
 		setIsLoading(true);
 
 		try {
-			const response = await fetch(`/api/account/${id}/openai-key`, {
+			const response = await fetch(`/api/account/${id}/deepseek-key`, {
 				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
