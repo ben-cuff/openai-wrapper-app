@@ -5,6 +5,8 @@ import ChatMessages from "@/components/chat/chat-area";
 import ChatSidebar from "@/components/chat/chat-sidebar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { aiModels } from "@/models/ai-models";
+import { AIModel } from "@/types/AIModel";
 import { Conversation } from "@/types/conversation";
 import { Message } from "@/types/message";
 import { Loader2 } from "lucide-react";
@@ -25,7 +27,9 @@ export default function ChatPage() {
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
-	const [AIModel, setAIModel] = useState("o1-preview");
+	const [AIModel, setAIModel] = useState<AIModel>(
+		aiModels[aiModels.length - 1]
+	);
 	const { data: session } = useSession();
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 	const [updateMessage, setUpdateMessage] = useState(false);
@@ -100,9 +104,9 @@ export default function ChatPage() {
 							content,
 						})
 					),
-					model: AIModel,
+					model: AIModel.id,
 					openai_api_key: session?.user?.openai_api_key,
-					url: "https://api.openai.com/v1",
+					url: AIModel.url,
 				}),
 			});
 
@@ -209,7 +213,7 @@ export default function ChatPage() {
 						}}
 					/>
 					<AIModelDropdown
-						AIModel={AIModel}
+						AIModel={AIModel.label}
 						setAIModel={setAIModel}
 					/>
 					<Button type="submit" disabled={isLoading}>
