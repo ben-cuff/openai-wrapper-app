@@ -40,8 +40,6 @@ export async function POST(req: Request) {
 	try {
 		const { messages, openai_api_key, model, url } = await req.json();
 
-		console.log(openai_api_key, model, url);
-
 		if (!messages || !Array.isArray(messages)) {
 			return new Response(
 				JSON.stringify({
