@@ -12,6 +12,7 @@ import { Message } from "@/types/message";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import NewChatButton from "@/components/chat/new-chat-button";
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([
@@ -176,17 +177,32 @@ export default function ChatPage() {
 		}
 	};
 
+	const handleNewChat = () => {
+		setConversationId(crypto.randomUUID());
+		setMessages([
+			{
+				id: "initial",
+				role: "assistant",
+				content: "Hello! How can I help you today?",
+			},
+		]);
+		setInput("");
+	};
+
 	return (
 		<main className="container h-[calc(100vh-3.5rem)] flex flex-row gap-4 p-4 md:p-6">
-			<ChatSidebar
-				conversations={conversations}
-				conversationId={conversationId}
-				setConversationId={setConversationId}
-				setMessages={setMessages}
-				session={session!}
-				setUpdateMessage={setUpdateMessage}
-				updateMessage={updateMessage}
-			/>
+			<aside className="hidden md:flex flex-col gap-4 w-[260px]">
+				<NewChatButton onNewChat={handleNewChat} />
+				<ChatSidebar
+					conversations={conversations}
+					conversationId={conversationId}
+					setConversationId={setConversationId}
+					setMessages={setMessages}
+					session={session!}
+					setUpdateMessage={setUpdateMessage}
+					updateMessage={updateMessage}
+				/>
+			</aside>
 			<div className="flex-1 flex flex-col h-full">
 				<div className="flex-1">
 					<ChatMessages

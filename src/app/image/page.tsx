@@ -20,7 +20,7 @@ export default function ImagePage() {
 	const { data: session } = useSession();
 	const [images, setImages] = useState<image[]>([]);
 	const scrollAreaRef = useRef<HTMLDivElement>(
-		null
+		null,
 	) as React.RefObject<HTMLDivElement>;
 	const [height, setHeight] = useState(1024);
 	const [width, setWidth] = useState(1024);
@@ -71,7 +71,7 @@ export default function ImagePage() {
 	const scrollToBottom = useCallback(() => {
 		if (scrollAreaRef.current) {
 			const scrollContainer = scrollAreaRef.current.querySelector(
-				"[data-radix-scroll-area-viewport]"
+				"[data-radix-scroll-area-viewport]",
 			);
 			if (scrollContainer) {
 				scrollContainer.scrollTop = scrollContainer.scrollHeight;
@@ -138,6 +138,17 @@ export default function ImagePage() {
 						"Send"
 					)}
 				</Button>
+				{images.length >= 1 && (
+					<Button
+						type="submit"
+						onClick={() => {
+							setImages([]);
+							setPrompts([]);
+						}}
+					>
+						New Thread
+					</Button>
+				)}
 			</form>
 		</main>
 	);
