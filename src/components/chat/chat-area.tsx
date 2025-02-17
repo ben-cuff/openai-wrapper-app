@@ -1,5 +1,6 @@
 import { Message } from "@/types/message";
 import { RefObject } from "react";
+import Markdown from "react-markdown";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Card, CardContent } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
@@ -34,15 +35,15 @@ export default function ChatMessages({
 									</AvatarFallback>
 								</Avatar>
 								<div
-									className={`rounded-lg px-4 py-2 max-w-[80%] ${
+									className={`rounded-lg px-4 max-w-[80%] ${
 										message.role === "assistant"
 											? "bg-muted prose prose-sm dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 max-w-none"
 											: "bg-primary text-primary-foreground"
 									}`}
 								>
-									<p className="text-sm whitespace-pre-wrap">
+									<Markdown className="text-sm whitespace-pre-wrap">
 										{message.content}
-									</p>
+									</Markdown>
 								</div>
 							</div>
 						))}
