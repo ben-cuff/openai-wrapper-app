@@ -1,9 +1,16 @@
 import { Conversation } from "@/types/conversation";
-import { Sidebar, SidebarContent, SidebarHeader, SidebarSeparator, SidebarTrigger, useSidebar } from "../ui/sidebar";
 import { Message } from "@/types/message";
-import { Button } from "../ui/button";
-import ConversationItem from "./conversation-item";
 import { Session } from "next-auth";
+import { Button } from "../ui/button";
+import {
+	Sidebar,
+	SidebarContent,
+	SidebarHeader,
+	SidebarSeparator,
+	SidebarTrigger,
+	useSidebar,
+} from "../ui/sidebar";
+import ConversationItem from "./conversation-item";
 
 export default function ChatSidebar({
 	conversations,
@@ -28,7 +35,7 @@ export default function ChatSidebar({
 		<>
 			<div className="overflow-hidden">
 				<Sidebar>
-					<SidebarHeader className="w-full text-xl mt-12">
+					<SidebarHeader className="w-full text-xl mt-14">
 						<span className="w-full flex flex-col gap-2">
 							<div className="flex">
 								Conversations
