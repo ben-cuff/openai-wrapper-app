@@ -2,23 +2,17 @@
 
 import AIModelDropdown from "@/components/chat/ai-model-dropdown";
 import ChatMessages from "@/components/chat/chat-area";
-import ConversationItem from "@/components/chat/conversation-item";
+import ChatSidebar from "@/components/chat/chat-sidebar";
 import { Button } from "@/components/ui/button";
-import {
-	Sidebar,
-	SidebarContent,
-	SidebarHeader,
-	SidebarSeparator,
-	SidebarTrigger,
-	useSidebar,
-} from "@/components/ui/sidebar";
 import { Textarea } from "@/components/ui/textarea";
+import { aiModels } from "@/models/ai-models";
+import { AIModel } from "@/types/AIModel";
 import { Conversation } from "@/types/conversation";
 import { Message } from "@/types/message";
 import { Loader2 } from "lucide-react";
-import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import NewChatButton from "@/components/chat/new-chat-button";
 
 export default function ChatPage() {
 	const [messages, setMessages] = useState<Message[]>([
@@ -34,12 +28,13 @@ export default function ChatPage() {
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
-	const [AIModel, setAIModel] = useState("o1-preview");
+	const [AIModel, setAIModel] = useState<AIModel>(
+		aiModels[aiModels.length - 1]
+	);
 	const { data: session } = useSession();
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 	const [updateMessage, setUpdateMessage] = useState(false);
-	const sidebar = useSidebar();
-	const [textareaHeight, setTextareaHeight] = useState(40); // Default height
+	const [textareaHeight, setTextareaHeight] = useState(40);
 
 	useEffect(() => {
 		const fetchConversations = async () => {
@@ -110,9 +105,9 @@ export default function ChatPage() {
 							content,
 						})
 					),
-					model: AIModel,
+					model: AIModel.id,
 					openai_api_key: session?.user?.openai_api_key,
-					url: "https://api.openai.com/v1",
+					url: AIModel.url,
 				}),
 			});
 
@@ -182,67 +177,32 @@ export default function ChatPage() {
 		}
 	};
 
+	const handleNewChat = () => {
+		setConversationId(crypto.randomUUID());
+		setMessages([
+			{
+				id: "initial",
+				role: "assistant",
+				content: "Hello! How can I help you today?",
+			},
+		]);
+		setInput("");
+	};
+
 	return (
 		<main className="container h-[calc(100vh-3.5rem)] flex flex-row gap-4 p-4 md:p-6">
-			<div className="overflow-hidden">
-				<Sidebar>
-					<SidebarHeader className="w-full text-xl mt-12">
-						<span className="w-full flex flex-col gap-2">
-							<div className="flex">
-								Conversations
-								<SidebarTrigger className="ml-auto" />
-							</div>
-							<Button
-								variant="outline"
-								className="w-full"
-								onClick={() => {
-									setMessages([
-										{
-											id: "initial",
-											role: "assistant",
-											content:
-												"Hello! How can I help you today?",
-										},
-									]);
-									setConversationId(crypto.randomUUID());
-								}}
-							>
-								New Chat
-							</Button>
-						</span>
-					</SidebarHeader>
-					<SidebarSeparator className="mb-2" />
-					<SidebarContent className="w-full">
-						<div className="flex flex-col gap-2 w-full">
-							{conversations
-								.sort(
-									(a, b) =>
-										new Date(b.updatedAt).getTime() -
-										new Date(a.updatedAt).getTime()
-								)
-								.map((conversation) => (
-									<ConversationItem
-										key={conversation.id}
-										conversation={conversation}
-										conversationId={conversationId}
-										setConversationId={setConversationId}
-										setMessages={setMessages}
-										session={
-											session && session.user?.id
-												? session
-												: ({} as Session)
-										}
-										setUpdateMessage={setUpdateMessage}
-										updateMessage={updateMessage}
-									/>
-								))}
-						</div>
-					</SidebarContent>
-				</Sidebar>
-			</div>
-			<div className="flex-shrink-0">
-				{!sidebar.open && <SidebarTrigger />}
-			</div>
+			<aside className="hidden md:flex flex-col gap-4 w-[260px]">
+				<NewChatButton onNewChat={handleNewChat} />
+				<ChatSidebar
+					conversations={conversations}
+					conversationId={conversationId}
+					setConversationId={setConversationId}
+					setMessages={setMessages}
+					session={session!}
+					setUpdateMessage={setUpdateMessage}
+					updateMessage={updateMessage}
+				/>
+			</aside>
 			<div className="flex-1 flex flex-col h-full">
 				<div className="flex-1">
 					<ChatMessages
@@ -269,7 +229,7 @@ export default function ChatPage() {
 						}}
 					/>
 					<AIModelDropdown
-						AIModel={AIModel}
+						AIModel={AIModel.label}
 						setAIModel={setAIModel}
 					/>
 					<Button type="submit" disabled={isLoading}>

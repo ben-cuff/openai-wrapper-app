@@ -1,4 +1,5 @@
 import { aiModels } from "@/models/ai-models";
+import { AIModel } from "@/types/AIModel";
 import { Check } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -15,7 +16,7 @@ export default function AIModelDropdown({
 	setAIModel,
 }: {
 	AIModel: string;
-	setAIModel: React.Dispatch<React.SetStateAction<string>>;
+	setAIModel: React.Dispatch<React.SetStateAction<AIModel>>;
 }) {
 	return (
 		<DropdownMenu>
@@ -48,7 +49,7 @@ export default function AIModelDropdown({
 				{aiModels.map((model) => (
 					<DropdownMenuItem
 						key={model.id}
-						onClick={() => setAIModel(model.id)}
+						onClick={() => setAIModel(model)}
 						className="flex items-center justify-between"
 					>
 						{model.label}

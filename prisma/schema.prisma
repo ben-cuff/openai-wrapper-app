@@ -12,6 +12,7 @@ model Account {
   username           String         @unique
   hashed_password    String
   openai_api_key     String?
+  deepseek_api_key   String?
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
   conversations      Conversation[]

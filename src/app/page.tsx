@@ -8,7 +8,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
 	return (
 		<ScrollArea className="h-full">
 			<main className="flex min-h-screen flex-col">
