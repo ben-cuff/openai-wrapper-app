@@ -19,7 +19,7 @@ export default function SettingsPage() {
 	const hasDeepseekApiKey = Boolean(session?.user?.deepseek_api_key);
 
 	return (
-		<main className="h-[calc(100vh-3.5rem)] flex items-center justify-center">
+		<main className="h-[calc(100vh-3.5rem)] flex items-center overflow-auto justify-center">
 			<div className="max-w-2xl w-full px-4">
 				<Card>
 					<CardHeader>
