@@ -7,7 +7,7 @@ import {
 
 export default function MenuContainer() {
 	return (
-		<NavigationMenu className="max-w-screen-xl mx-auto px-4">
+		<NavigationMenu className="w-full placeholder:mx-auto px-4">
 			<NavigationMenuList className="flex space-x-4">
 				<NavigationMenuItem>
 					<NavigationMenuLink
