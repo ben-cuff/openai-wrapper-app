@@ -38,7 +38,7 @@ export default function ChatMessages({
 									className={`rounded-lg px-4 max-w-[80%] ${
 										message.role === "assistant"
 											? "bg-muted prose prose-sm dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 max-w-none"
-											: "bg-primary text-primary-foreground"
+											: "bg-primary text-primary-foreground py-4"
 									}`}
 								>
 									<Markdown className="text-sm whitespace-pre-wrap">

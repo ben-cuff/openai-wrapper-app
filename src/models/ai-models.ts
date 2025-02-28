@@ -47,6 +47,12 @@ export const aiModels = [
 		provider: "openai",
 		url: "https://api.openai.com/v1",
 	},
+	{
+		id: "gpt-4.5-preview",
+		label: "GPT-4.5 (preview)",
+		provider: "openai",
+		url: "https://api.openai.com/v1",
+	},
 ];
 
 export const aiImageModels = [
