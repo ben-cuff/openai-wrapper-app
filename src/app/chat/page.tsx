@@ -5,7 +5,6 @@ import ChatMessages from "@/components/chat/chat-area";
 import ChatSidebar from "@/components/chat/chat-sidebar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { aiModels } from "@/models/ai-models";
 import { AIModel } from "@/types/AIModel";
 import { Conversation } from "@/types/conversation";
 import { Message } from "@/types/message";
@@ -27,9 +26,12 @@ export default function ChatPage() {
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const scrollAreaRef = useRef<HTMLDivElement>(null);
-	const [AIModel, setAIModel] = useState<AIModel>(
-		aiModels[aiModels.length - 1]
-	);
+	const [AIModel, setAIModel] = useState<AIModel>({
+		id: "o3-mini",
+		label: "o3-mini",
+		provider: "openai",
+		url: "https://api.openai.com/v1",
+	});
 	const { data: session } = useSession();
 	const [conversations, setConversations] = useState<Conversation[]>([]);
 	const [updateMessage, setUpdateMessage] = useState(false);
