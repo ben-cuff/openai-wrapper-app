@@ -38,6 +38,14 @@ export default function ChatPage() {
 	const [textareaHeight, setTextareaHeight] = useState(40);
 
 	useEffect(() => {
+		if (session == undefined) {
+			setIsLoading(true);
+		} else {
+			setIsLoading(false);
+		}
+	}, [session]);
+
+	useEffect(() => {
 		const fetchConversations = async () => {
 			if (session?.user?.id) {
 				const response = await fetch(
